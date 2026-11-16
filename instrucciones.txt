@@ -1,0 +1,107 @@
+Construye una aplicación web en español para una persona que crea contenido y vende servicios y productos online. Quiero usarla para pensar qué publicar, escribirlo, organizarlo y planificarlo. Después de publicar, quiero poder registrar qué salió, cuándo y con qué resultado.
+
+Alcance imprescindible. La aplicación trabaja con texto, fechas, estados, etiquetas, métricas manuales y enlaces opcionales. La grabación, edición y subida de vídeos, el diseño de imágenes y el envío de emails los hago yo fuera de la app. No implementes carga, almacenamiento, reproducción, visualización ni análisis de archivos multimedia. Tampoco publicación automática, envío de correos ni conexiones con redes sociales o Kit. Un reel dentro de la app es una ficha editorial. Un B-roll es una descripción escrita del plano que quiero grabar. Una story es una tarjeta de planificación con el texto y las indicaciones que necesito. Puedo usar toda la aplicación sin adjuntar ningún archivo.
+
+1. Organiza el contenido alrededor de ideas y piezas
+
+Una idea puede dar lugar a varias piezas. Por ejemplo, la pregunta de una clienta puede inspirar un reel, tres stories que publicaré juntas y un email. Desde la idea quiero ver qué he creado a partir de ella y, desde cualquier pieza, poder volver a su origen.
+
+Distingue tres acciones:
+
+* Probar otra versión. Escribo otro gancho, guion o asunto para la misma pieza. Conservo las alternativas, elijo mi favorita y la pieza sigue ocupando una sola entrada en el calendario.
+* Crear una adaptación. Convierto, por ejemplo, un reel en un email. La nueva pieza conserva la relación con la idea, pero tiene su propia finalidad, fecha y estado.
+* Reutilizar algo publicado. Parto del texto que utilicé y creo un borrador nuevo. La versión publicada y sus resultados se conservan.
+
+2. Clasifica por pilar y por finalidad
+
+Permíteme crear y editar mis pilares de contenido. Un pilar expresa de qué hablo. La finalidad estratégica expresa qué quiero conseguir con esa pieza. Puedo trabajar el mismo pilar con cuatro finalidades:
+
+Finalidad Para qué la utilizo
+Attract · Atraer Llegar a personas nuevas y ayudarles a reconocerse en un problema o aspiración.
+Nurture · Cultivar la relación Aportar valor a quienes ya me siguen, escucharles y fortalecer la confianza.
+Position · Posicionarme como referente Mostrar mi criterio, mi método, mi experiencia o cómo resuelvo un problema.
+Convert · Convertir Conseguir una acción comercial concreta, como comprar, reservar o iniciar una conversación de venta.
+
+Cada pieza puede tener una finalidad principal. Usa estas etiquetas en el calendario, el tablero y los filtros. Cuando seleccione Convert, muéstrame qué oferta promociono, qué acción pido y cómo puede realizarla la persona. Debe servir tanto «Compra en este enlace» como «Escríbeme SESIÓN por privado». Si marco la pieza como lista y aún falta la llamada a la acción, avísame.
+
+Incluye una vista pilares × finalidades con acceso a las piezas de cada cruce. Quiero poder descubrir, por ejemplo, que utilizo mucho un tema para atraer audiencia y apenas lo uso para explicar mi método. Déjame decidir el equilibrio según mis objetivos y la fase del lanzamiento.
+
+3. Captura rápida y brainstorming
+
+En móvil quiero poder anotar algo en el momento en que se me ocurra. Ofrece tres accesos desde Inicio: «+ Idea», «+ Frase para B-roll» y «+ Idea de email». Basta con escribir y guardar. La clasificación puede esperar.
+
+Crea una bandeja de ideas pendientes y una zona de brainstorming para agruparlas por tema, pilar, oferta o problema de la audiencia. Permite guardar preguntas y objeciones con las palabras originales, su procedencia y cuántas veces han aparecido. Desde una idea quiero explorar ángulos como tutorial, historia personal, error frecuente, demostración, caso real u objeción de compra.
+
+Para priorizar, permite indicar relevancia, demanda y tiempo estimado de preparación. Quiero poder buscar «ideas para este lanzamiento que pueda preparar en 30 minutos». Añade una acción opcional «Copiar prompt para explorar ángulos» que reúna la idea, audiencia, oferta y tono en un texto que pueda pegar en Claude.
+
+4. Biblioteca de contenidos, guiones y preparación de grabaciones
+
+Ofrece vistas de lista y tablero. Cada ficha puede contener título, idea de origen, formato, canal, pilar, finalidad, guion, texto de publicación, CTA, oferta, lanzamiento, notas, fecha y estado. Permite combinar filtros y buscar por texto.
+
+Para contenidos sociales, utiliza Borrador, En preparación, Listo, Planificado y Publicado. En el editor de guiones quiero trabajar el gancho, el desarrollo y el cierre, guardar versiones con nombre y marcar cuál voy a usar.
+
+Incluye una vista «Día de grabación» que reúna las fichas que elija para una sesión. Muéstrame el guion seleccionado, qué plano quiero hacer, qué necesito preparar y la duración estimada. Desde el móvil podré marcar «Ya grabado» para llevar la cuenta. Esa marca es un dato manual de seguimiento y no equivale a «Publicado».
+
+La biblioteca de recursos de marca será textual: ejemplos de tono, CTA habituales, testimonios autorizados, descripciones de planos recurrentes y enlaces de venta.
+
+5. Banco de frases para B-rolls y reels de prueba
+
+Quiero una sección que también funcione por sí sola. Si se me ocurre una buena frase, puedo guardarla aunque todavía no tenga un vídeo pensado. Otro día podré elegirla, copiarla y ponerla sobre un B-roll de unos siete segundos en el editor que utilice fuera de la app.
+
+* Captura. «+ Frase» abre el campo de texto. Conserva los saltos de línea y ofrece «Guardar» y «Guardar y escribir otra».
+* Selección. Muestra las frases completas en tarjetas de texto, con favoritos, búsqueda y filtros «Sin usar» y «Ya utilizadas». «Elegir una para hoy» selecciona una al azar respetando los filtros activos.
+* Uso rápido. «Copiar frase» copia exactamente lo escrito. Debo poder entrar, encontrar una frase y salir con ella copiada sin crear una ficha de reel.
+* Planificación opcional. «Planificar reel de prueba» crea una ficha con el texto en pantalla, finalidad inicial Attract y duración orientativa de siete segundos. Si quiero, añado una nota como «Plano de mis manos abriendo la agenda» y una fecha prevista.
+* Historial. Copiar una frase o planificar un reel la mantiene disponible como «Sin usar». Cuando marque el reel como publicado, registra su uso. Si publiqué directamente por mi cuenta, también puedo pulsar «Registrar uso» e introducir fecha y enlace opcional. Permite reutilizar la frase, guardar variantes y consultar el texto exacto que empleé en cada ocasión.
+
+6. Planificador de secuencias de stories
+
+Crea un editor de tarjetas de texto ordenables. En cada tarjeta quiero escribir qué voy a decir, qué texto aparecerá en pantalla, qué imagen o plano tengo que preparar y si usaré encuesta, pregunta, enlace o CTA. Permite duplicar y reordenar tarjetas, leer la secuencia completa y guardar su estructura como plantilla.
+
+Una secuencia ocupa una sola entrada en el calendario. Al abrirla veo, por ejemplo, «Story 1: plantear la pregunta», «Story 2: encuesta» y «Story 3: responder e invitar a escribirme». Después crearé y subiré las stories por mi cuenta.
+
+7. Email marketing
+
+Quiero escribir y organizar mi estrategia de correo aunque nunca conecte ninguna herramienta externa. Crea tres vistas:
+
+* Ideas de email. Una bandeja para capturar asuntos, anécdotas, preguntas o argumentos. Después podré convertir una idea en broadcast o en paso de una secuencia.
+* Broadcasts. Para preparar uno o varios correos por semana. Incluye «Esta semana», «Sin fecha» y «Enviados». El editor tendrá autoguardado, asuntos alternativos con uno elegido, texto de vista previa, cuerpo con formato y enlaces, y CTA. Permite clasificar por temática, pilar, finalidad, audiencia, oferta y lanzamiento.
+* Secuencias. Para bienvenida, lanzamiento, poscompra o upsell. Define a quién va dirigida, qué la inicia y qué busca conseguir. Permite ordenar los correos, duplicar pasos, incorporar un email existente y guardar plantillas. Una misma secuencia puede empezar con correos Nurture y terminar con uno Convert.
+
+Distingue las fechas fijas de los plazos relativos. Un broadcast del viernes aparece en el calendario editorial. Un email previsto para «tres días después de comprar el curso» aparece en la cronología de su secuencia con ese plazo. Si un broadcast pertenece a un lanzamiento, puedo abrirlo desde ambos lugares y editar el mismo correo.
+
+Añade «Copiar asunto», «Copiar texto de vista previa» y «Copiar cuerpo con formato». Yo llevo el contenido a mi plataforma, realizo el envío y marco Enviado manualmente. Conserva la versión que envié.
+
+8. Ofertas y lanzamientos
+
+En Ofertas, registra mis productos y servicios con público, problema que resuelven, propuesta de valor, objeciones frecuentes y vía de compra o reserva.
+
+En Lanzamientos, permite definir oferta, objetivo, fechas, hitos y fases de expectación, apertura, venta, cierre y seguimiento. Desde cada fase quiero ver los reels, carruseles, stories y emails previstos, qué finalidad tienen y cuáles quedan por escribir. Incluye plantillas editables para lanzar un servicio y un producto digital. El contenido habitual debe poder convivir con el de campaña.
+
+9. Inicio, calendario y revisión semanal
+
+La pantalla Hoy debe responder de un vistazo a tres preguntas: ¿qué tengo que preparar?, ¿qué tengo previsto publicar o enviar hoy?, ¿cuál es el próximo hito de mi lanzamiento?
+
+El calendario tendrá vistas semanal y mensual, una bandeja de piezas sin fecha y filtros por canal, formato, pilar, finalidad, oferta, lanzamiento y estado. Permite mover piezas arrastrándolas en ordenador o cambiando la fecha desde el móvil. Guarda por separado la fecha prevista y la fecha real de publicación o envío. Si publiqué el jueves algo previsto para el martes, quiero conservar ambas. Al marcarlo como publicado podré pegar la URL si me interesa.
+
+En la revisión semanal quiero registrar métricas manuales relevantes para cada pieza. Para Attract pueden interesarme alcance y nuevos seguidores. Para Nurture, respuestas y conversaciones. Para Position, consultas que mencionan mi método. Para Convert, solicitudes, reservas, compras o ingresos. Distingue cero de dato pendiente, y una venta confirmada de una atribución desconocida. Desde esta revisión podré crear una adaptación o programar una fecha para retomar contenido que haya funcionado bien.
+
+10. Implementación y comprobación
+
+La primera versión es de uso individual, en español y con datos persistentes. Prioriza rapidez de captura en móvil y comodidad para redactar y planificar en ordenador. Si el repositorio ya contiene un proyecto, aprovecha su arquitectura. Si está vacío, elige una pila sencilla con TypeScript y base de datos. Implementa la aplicación funcional y entrega instrucciones para arrancarla.
+
+Añade datos de demostración de una creadora que vende un curso y una asesoría. Usa la pregunta «¿Cómo sé si me basta con el curso o necesito una asesoría individual?» para mostrar cómo una idea se convierte en un reel con dos ganchos, una secuencia de tres stories y un correo de lanzamiento. Incluye también tres broadcasts en una semana, una secuencia poscompra con tiempos relativos y algunas frases para reels de prueba.
+
+Antes de entregar, comprueba estos recorridos en la aplicación:
+
+1. Desde el móvil guardo una frase, cierro la app y al volver puedo encontrarla y copiarla con sus saltos de línea.
+2. Planifico un reel con esa frase y una nota sobre el plano. Sigue figurando como «Sin usar» hasta que registro que lo he publicado externamente.
+3. Preparo dos guiones para un reel y solo aparece una entrada en el calendario. Si adapto la idea a un email, puedo darle otra finalidad y fecha.
+4. Reordeno las tarjetas de una secuencia de stories y puedo leerlas en el orden que usaré al publicarlas.
+5. Edito un broadcast desde su lanzamiento y veo el cambio desde Email marketing. El email de poscompra conserva su plazo relativo.
+6. Reprogramo una publicación, registro después la fecha en que realmente salió y consulto sus resultados sin perder la planificación original.
+7. Puedo completar todos los recorridos solo con texto y acciones manuales, sin proporcionar archivos multimedia, credenciales de redes ni claves de servicios externos.
+
+Entrega el código, los pasos de arranque, cómo cargar el ejemplo y un resumen de lo que has verificado. Indica cualquier función pendiente o que no hayas podido comprobar.
+
+La apariencia quiero que sea simple, minimalista, aesthetic, con tonos verdosos y rosados claros y que el color principal sea el blanco.

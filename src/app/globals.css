@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+/* Paleta de Rosedal. Valores y contrastes: docs/03-diseno-visual.md */
+@theme {
+  --color-fondo: #ffffff;
+  --color-fondo-suave: #fafbf9;
+  --color-borde: #ecefec;
+  --color-tinta: #2b312d;
+  --color-tinta-suave: #6b736e;
+  --color-tinta-tenue: #8a918c;
+
+  --color-verde-50: #f4f8f4;
+  --color-verde-100: #e6f0e7;
+  --color-verde-200: #cfe2d2;
+  --color-verde-300: #a9cbb0;
+  --color-verde-700: #3d6b52;
+
+  --color-rosa-50: #fdf5f6;
+  --color-rosa-100: #fbe8ec;
+  --color-rosa-200: #f6d0d8;
+  --color-rosa-300: #edb1bf;
+  --color-rosa-800: #8f3f58;
+  --color-frambuesa: #b5506f;
+
+  --color-menta-100: #e0f2ec;
+  --color-menta-700: #2f6b5e;
+
+  --color-aviso: #8a6116;
+  --color-aviso-fondo: #fbf3df;
+  --color-error: #a63d3d;
+  --color-error-fondo: #fbeaea;
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), Georgia, serif;
+
+  --radius-tarjeta: 12px;
+  --radius-boton: 8px;
+}
+
+html {
+  background: var(--color-fondo);
+  color: var(--color-tinta);
+  font-size: 15px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-fondo);
+  min-height: 100dvh;
+}
+
+/* En móvil, 16 px en campos para que el navegador no amplíe la página */
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-verde-300);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
