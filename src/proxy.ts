@@ -18,13 +18,15 @@ export async function proxy(request: NextRequest) {
     },
   });
 
-  const { data } = await supabase.auth.getUser();
+  // getClaims verifica el token en local (sin viajar a Supabase en cada navegación) y lo refresca si hace falta.
+  const { data } = await supabase.auth.getClaims();
+  const haySesion = Boolean(data?.claims);
   const enLogin = request.nextUrl.pathname.startsWith("/login");
 
-  if (!data.user && !enLogin) {
+  if (!haySesion && !enLogin) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
-  if (data.user && enLogin) {
+  if (haySesion && enLogin) {
     return NextResponse.redirect(new URL("/hoy", request.url));
   }
   return respuesta;
