@@ -14,35 +14,35 @@ test("R4: reordenar una secuencia de stories", async ({ page }) => {
   await page.goto("/biblioteca");
   await page.locator("a").filter({ hasText: titulo }).first().click();
   await expect(page.getByRole("heading", { name: titulo })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Story 1" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Story 2" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Story 3" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Story 1", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Story 2", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Story 3", exact: true })).toBeVisible();
 
   // 2. Duplicar la tarjeta 2: la copia queda tras la original.
-  const segunda = page.locator("form").filter({ has: page.getByRole("heading", { name: "Story 2" }) });
+  const segunda = page.locator("form").filter({ has: page.getByRole("heading", { name: "Story 2", exact: true }) });
   await segunda.getByRole("button", { name: "Duplicar" }).click();
-  await expect(page.getByRole("heading", { name: "Story 4" })).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByRole("heading", { name: "Story 4", exact: true })).toBeVisible({ timeout: 30_000 });
 
   // 3. Mover la última tarjeta a la primera posición.
   for (let i = 0; i < 3; i += 1) {
-    const ultima = page.locator("form").filter({ has: page.getByRole("heading", { name: "Story 4" }) });
+    const ultima = page.locator("form").filter({ has: page.getByRole("heading", { name: "Story 4", exact: true }) });
     const botonSubir = ultima.getByRole("button", { name: "Subir" });
     if (await botonSubir.isDisabled()) break;
     await botonSubir.click();
     await page.waitForTimeout(600);
   }
-  await expect(page.getByRole("heading", { name: "Story 1" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Story 1", exact: true })).toBeVisible();
 
   // 4. Recargar: el orden se mantiene.
   await page.reload();
-  await expect(page.getByRole("heading", { name: "Story 1" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Story 4" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Story 1", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Story 4", exact: true })).toBeVisible();
 
   // 5. «Leer la secuencia» muestra las cuatro tarjetas en el orden nuevo.
   await page.getByText("Leer la secuencia").click();
   const lectura = page.locator("details").filter({ hasText: "Leer la secuencia" });
-  await expect(lectura.getByRole("heading", { name: /Story 1/ })).toBeVisible();
-  await expect(lectura.getByRole("heading", { name: /Story 4/ })).toBeVisible();
+  await expect(lectura.getByRole("heading", { name: /^Story 1:/ })).toBeVisible();
+  await expect(lectura.getByRole("heading", { name: /^Story 4:/ })).toBeVisible();
 
   // 6. En el calendario la secuencia sigue siendo una sola entrada.
   const lunes = await page.evaluate(() => {
@@ -73,7 +73,7 @@ test("R4: reordenar una secuencia de stories", async ({ page }) => {
   await page.getByLabel("Título de la pieza").fill("Secuencia desde plantilla");
   await page.getByRole("button", { name: "Crear desde la plantilla" }).click();
   await expect(page.getByRole("heading", { name: "Secuencia desde plantilla" })).toBeVisible({ timeout: 30_000 });
-  await expect(page.getByRole("heading", { name: "Story 1" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Story 1", exact: true })).toBeVisible();
   await expect(page.getByLabel("Qué voy a decir").first()).toHaveValue("");
   await expect(page.getByLabel("Texto en pantalla").first()).toHaveValue("");
 });

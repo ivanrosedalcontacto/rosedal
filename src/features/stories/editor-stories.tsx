@@ -15,7 +15,7 @@ function textoSecuencia(tarjetas: StoryTarjeta[]) {
 
 export function EditorStories({ piezaId, tarjetas }: { piezaId: string; tarjetas: StoryTarjeta[] }) {
   return <section className="flex flex-col gap-4"><div className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="text-xl font-semibold">Secuencia de stories</h2><p className="text-sm text-tinta-suave">Sube o baja las tarjetas para cambiar el orden.</p></div><form action={crearTarjeta.bind(null, piezaId)}><button className={botonPrincipal}>+ Añadir tarjeta</button></form></div>
-    {tarjetas.length === 0 ? <p className="rounded-tarjeta bg-verde-50 p-4 text-tinta-suave">Añade la primera tarjeta para empezar la secuencia.</p> : <><div className="flex flex-col gap-3">{tarjetas.map((tarjeta, i) => <FormularioTarjeta key={tarjeta.id} piezaId={piezaId} tarjeta={tarjeta} primera={i === 0} ultima={i === tarjetas.length - 1} />)}</div><LecturaStories tarjetas={tarjetas} /></>}
+    {tarjetas.length === 0 ? <p className="rounded-tarjeta bg-verde-50 p-4 text-tinta-suave">Añade la primera tarjeta para empezar la secuencia.</p> : <><div className="flex flex-col gap-3">{tarjetas.map((tarjeta, i) => <FormularioTarjeta key={tarjeta.id} piezaId={piezaId} tarjeta={tarjeta} numero={i + 1} primera={i === 0} ultima={i === tarjetas.length - 1} />)}</div><LecturaStories tarjetas={tarjetas} /></>}
     <FormularioPlantillaStories piezaId={piezaId} />
   </section>;
 }
@@ -33,9 +33,9 @@ function FormularioPlantillaStories({ piezaId }: { piezaId: string }) {
   </form>;
 }
 
-function FormularioTarjeta({ piezaId, tarjeta, primera, ultima }: { piezaId: string; tarjeta: StoryTarjeta; primera: boolean; ultima: boolean }) {
+function FormularioTarjeta({ piezaId, tarjeta, numero, primera, ultima }: { piezaId: string; tarjeta: StoryTarjeta; numero: number; primera: boolean; ultima: boolean }) {
   const [r, accion, pendiente] = useActionState(guardarTarjeta.bind(null, piezaId, tarjeta.id), inicial);
-  return <form action={accion} className="flex flex-col gap-3 rounded-tarjeta border border-borde p-4"><div className="flex flex-wrap items-center justify-between gap-2"><h3 className="font-semibold">Story {tarjeta.orden + 1}</h3><div className="flex gap-1"><button formAction={moverTarjeta.bind(null, piezaId, tarjeta.id, "subir")} disabled={primera} className={botonDiscreto}>Subir</button><button formAction={moverTarjeta.bind(null, piezaId, tarjeta.id, "bajar")} disabled={ultima} className={botonDiscreto}>Bajar</button><button formAction={duplicarTarjeta.bind(null, piezaId, tarjeta.id)} className={botonDiscreto}>Duplicar</button><button formAction={borrarTarjeta.bind(null, piezaId, tarjeta.id)} className={botonDiscreto}>Quitar</button></div></div>
+  return <form action={accion} className="flex flex-col gap-3 rounded-tarjeta border border-borde p-4"><div className="flex flex-wrap items-center justify-between gap-2"><h3 className="font-semibold">Story {numero}</h3><div className="flex gap-1"><button formAction={moverTarjeta.bind(null, piezaId, tarjeta.id, "subir")} disabled={primera} className={botonDiscreto}>Subir</button><button formAction={moverTarjeta.bind(null, piezaId, tarjeta.id, "bajar")} disabled={ultima} className={botonDiscreto}>Bajar</button><button formAction={duplicarTarjeta.bind(null, piezaId, tarjeta.id)} className={botonDiscreto}>Duplicar</button><button formAction={borrarTarjeta.bind(null, piezaId, tarjeta.id)} className={botonDiscreto}>Quitar</button></div></div>
     <label className="text-sm font-medium">Título corto<input name="titulo" defaultValue={tarjeta.titulo} className={campo} /></label>
     <label className="text-sm font-medium">Qué voy a decir<textarea name="que_digo" defaultValue={tarjeta.que_digo} rows={3} className={campo} /></label>
     <label className="text-sm font-medium">Texto en pantalla<textarea name="texto_pantalla" defaultValue={tarjeta.texto_pantalla} rows={2} className={campo} /></label>

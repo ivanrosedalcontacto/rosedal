@@ -31,9 +31,10 @@ test("R2: planificar un reel de prueba y registrar su publicación", async ({ pa
 
   // 3. Abrir la ficha creada y comprobar sus datos.
   await page.goto("/biblioteca");
-  const reel = page.locator("a").filter({ hasText: "Reel de prueba" }).first();
+  const reel = page.locator("a").filter({ hasText: frase }).first();
   await reel.click();
-  await expect(page.getByRole("heading", { name: /Reel de prueba/ })).toBeVisible();
+  await page.waitForURL("**/piezas/**");
+  await expect(page.getByRole("heading", { level: 1, name: /Reel de prueba/ })).toBeVisible();
   await expect(page.getByText("Reel de prueba").first()).toBeVisible();
   await expect(page.getByText("Attract · Atraer").first()).toBeVisible();
   await expect(page.getByLabel("Duración estimada (segundos)")).toHaveValue("7");
@@ -55,7 +56,7 @@ test("R2: planificar un reel de prueba y registrar su publicación", async ({ pa
 
   // 6. Volver al reel y marcarlo como publicado con fecha de hoy y un enlace.
   await page.goto("/biblioteca");
-  await page.locator("a").filter({ hasText: "Reel de prueba" }).first().click();
+  await page.locator("a").filter({ hasText: frase }).first().click();
   await page.getByLabel("Fecha real").fill(hoy);
   await page.getByLabel("Enlace publicado (opcional)").fill("https://ejemplo.com/reel-de-prueba");
   await page.getByRole("button", { name: "Marcar como publicada" }).click();

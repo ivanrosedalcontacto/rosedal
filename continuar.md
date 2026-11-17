@@ -232,7 +232,8 @@ Objetivo del PRP: «Los tres accesos de captura desde Inicio, bandeja de pendien
 - No se ha verificado el aspecto a 375 px ni a 1280 px.
 - Sin comprobar en pantalla: edición de pilares, ofertas completas, recursos, y la hoja de captura (guardar, «guardar y escribir otra», borrador).
 - Sin comprobar: el flujo de «Cerrar sesión» recién añadido.
-- No hay pruebas automáticas (Playwright) todavía; el PRP las exige en la Fase 13. Considera montarlas pronto y dejar el primer recorrido (R1: guardar una frase en móvil y copiarla) como base.
+- **Pruebas automáticas (Playwright, `e2e/`, 2026-11-17)**: R1, R2, R3, R4 y R6 con el usuario de pruebas (`scripts/usuario-prueba.mjs`; `E2E_EMAIL`/`E2E_PASSWORD` en `.env.local`). Resultado: ordenador 6/6 y móvil 5/5 (R3 solo se ejecuta en ordenador, como dice `docs/06`). Se lanzan con la app en marcha (`npm run dev`) y `npx playwright test --project=ordenador|movil`, un proyecto cada vez. `00-ejemplo` borra y recarga el ejemplo antes de cada tanda; las adaptaciones que crea R3 no son de ejemplo y se acumulan en la cuenta de pruebas. Faltan R5 y R7 (sin prueba escrita) y las capturas de pantalla para el informe. Una vez R2 falló con un «Failed to fetch» puntual del servidor de desarrollo y pasó al repetirlo.
+- **Fallos de la app encontrados con las pruebas y corregidos**: (1) «Quitar ejemplo» dejaba 22 piezas por un `check` de `piezas` (migración `20261117000010`) y ahora informa de los errores de borrado; (2) reordenar stories podía dejar una tarjeta como «Story 0» (ahora se renumera la secuencia y el título usa la posición); (3) texto con codificación rota en la ficha de pieza («ClasificaciÃ³n»).
 - El PRP tiene 5 decisiones pendientes (D1-D5); la usuaria aprobó las propuestas por defecto: Supabase en la nube (D1), cuenta única (D2), sin modo sin conexión (D3), contenido publicado de solo lectura (D4), nombre «Rosedal» como logo (D5).
 
 ## 9. Tareas de limpieza y seguridad pendientes

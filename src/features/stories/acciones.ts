@@ -56,10 +56,13 @@ export async function moverTarjeta(piezaId: string, tarjetaId: string, direccion
   const indice = lista.findIndex((x) => x.id === tarjeta.data);
   const destino = direccion === "subir" ? indice - 1 : indice + 1;
   if (indice < 0 || destino < 0 || destino >= lista.length) return;
-  const actual = lista[indice]!; const vecina = lista[destino]!;
-  await supabase.from("story_tarjetas").update({ orden: -1 }).eq("id", actual.id);
-  await supabase.from("story_tarjetas").update({ orden: actual.orden }).eq("id", vecina.id);
-  await supabase.from("story_tarjetas").update({ orden: vecina.orden }).eq("id", actual.id);
+  // Se renumera toda la secuencia (0, 1, 2…): así nunca queda un orden temporal ni huecos si dos movimientos se solapan.
+  const nueva = [...lista];
+  const [movida] = nueva.splice(indice, 1);
+  nueva.splice(destino, 0, movida!);
+  for (const [posicion, t] of nueva.entries()) {
+    if (t.orden !== posicion) await supabase.from("story_tarjetas").update({ orden: posicion }).eq("id", t.id);
+  }
   refrescarStories(pieza.data);
 }
 

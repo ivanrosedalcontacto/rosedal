@@ -121,11 +121,11 @@ export default async function FichaPieza({ params }: { params: Promise<{ id: str
         {pieza.formato === "stories" && <EditorStories piezaId={pieza.id} tarjetas={tarjetas} />}
         {esEmail && <EditorEmail pieza={pieza} asuntos={asuntos} marca={marca} bloqueado={Boolean(pieza.publicado_snapshot)} enMarcha={enMarcha} />}
         {!esEmail && <section className="flex flex-col gap-4"><h2 className="text-xl font-semibold">Guion</h2>
-          {elegida && <><div className="flex flex-wrap items-center gap-2">{versiones.map((v) => <div key={v.id} className="flex items-center gap-1"><form action={elegirVersion.bind(null, pieza.id, v.id)}><button className={`rounded-full px-3 py-1.5 text-sm ${v.elegida ? "bg-verde-100 text-verde-700" : "border border-borde"}`}>{v.nombre}{v.elegida ? " Â· La que voy a usar" : ""}</button></form>{versiones.length > 1 && <form action={borrarVersion.bind(null, pieza.id, v.id)}><button className="px-1 text-xs text-tinta-suave">Quitar</button></form>}</div>)}</div><FormularioVersion piezaId={pieza.id} version={elegida} /><div className="flex flex-wrap gap-2"><BotonCopiar texto={textoGuion(elegida)} etiqueta="Copiar guion" /><BotonCopiar texto={promptGanchos(datosPieza)} etiqueta="Copiar prompt de ganchos" /></div></>}
+          {elegida && <><div className="flex flex-wrap items-center gap-2">{versiones.map((v) => <div key={v.id} className="flex items-center gap-1"><form action={elegirVersion.bind(null, pieza.id, v.id)}><button className={`rounded-full px-3 py-1.5 text-sm ${v.elegida ? "bg-verde-100 text-verde-700" : "border border-borde"}`}>{v.nombre}{v.elegida ? " · La que voy a usar" : ""}</button></form>{versiones.length > 1 && <form action={borrarVersion.bind(null, pieza.id, v.id)}><button className="px-1 text-xs text-tinta-suave">Quitar</button></form>}</div>)}</div><FormularioVersion piezaId={pieza.id} version={elegida} /><div className="flex flex-wrap gap-2"><BotonCopiar texto={textoGuion(elegida)} etiqueta="Copiar guion" /><BotonCopiar texto={promptGanchos(datosPieza)} etiqueta="Copiar prompt de ganchos" /></div></>}
           <ComparadorVersiones versiones={versiones} />
           <FormularioNuevaVersion piezaId={pieza.id} />
         </section>}
-        {derivadas.length > 0 && <section><h2 className="text-xl font-semibold">Derivadas de esta pieza</h2><ul className="mt-3">{derivadas.map((d) => <li key={d.id}><Link href={`/piezas/${d.id}`} className="text-verde-700">{d.formato} Â· {d.titulo}</Link></li>)}</ul></section>}
+        {derivadas.length > 0 && <section><h2 className="text-xl font-semibold">Derivadas de esta pieza</h2><ul className="mt-3">{derivadas.map((d) => <li key={d.id}><Link href={`/piezas/${d.id}`} className="text-verde-700">{d.formato} · {d.titulo}</Link></li>)}</ul></section>}
         <PasosPieza piezaId={pieza.id} pasos={pasos} pasosPorFormato={pasosPorFormato[pieza.formato] ?? []} />
         {recursosR && recursosR.length > 0 && (
           <section className="flex flex-col gap-2">
@@ -140,11 +140,11 @@ export default async function FichaPieza({ params }: { params: Promise<{ id: str
           </section>
         )}
       </main>      <aside className="flex flex-col gap-6">
-        <section><h2 className="mb-3 text-xl font-semibold">ClasificaciÃ³n y planificaciÃ³n</h2><FormularioPieza pieza={pieza} pilares={pilares} ofertas={ofertas} lanzamientos={lanzamientos} fases={fases} /></section>
+        <section><h2 className="mb-3 text-xl font-semibold">Clasificación y planificación</h2><FormularioPieza pieza={pieza} pilares={pilares} ofertas={ofertas} lanzamientos={lanzamientos} fases={fases} /></section>
         {!pieza.publicado_snapshot && <>{!(esEmail && enMarcha) && <FormularioPlanificar piezaId={pieza.id} fecha={pieza.fecha_prevista} />}<FormularioPublicar piezaId={pieza.id} fecha={pieza.fecha_real} tipo={esEmail ? "email" : "pieza"} /></>}
         {!esEmail && <form action={marcarGrabada.bind(null, pieza.id, !pieza.grabado)}><button className={botonDiscreto}>{pieza.grabado ? "Marcar como no grabada" : "Ya grabado"}</button><p className="mt-1 text-xs text-tinta-suave">No cambia el estado de la pieza.</p></form>}
         <MarcaPerenne piezaId={pieza.id} perenne={pieza.perenne} />
-        <EnlaceConCampana nombre="el enlace de la llamada a la acciÃ³n" valor={pieza.cta_url ?? ""} />
+        <EnlaceConCampana nombre="el enlace de la llamada a la acción" valor={pieza.cta_url ?? ""} />
         <section className="flex flex-col gap-2">
           <h2 className="text-xl font-semibold">Historial de fechas</h2>
           <HistorialDeFechas cambios={cambios} />

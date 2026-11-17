@@ -219,8 +219,10 @@ export async function quitarEjemplo(supabase: Cliente): Promise<ResultadoDemo> {
     "pilares",
     "recursos_marca",
   ];
+  const fallos: string[] = [];
   for (const tabla of tablas) {
-    await supabase.from(tabla).delete().eq("es_demo", true);
+    const { error } = await supabase.from(tabla).delete().eq("es_demo", true);
+    if (error) fallos.push(`${tabla}: ${error.message}`);
   }
   const despues = await contarEjemplo(supabase);
   return {
@@ -228,6 +230,6 @@ export async function quitarEjemplo(supabase: Cliente): Promise<ResultadoDemo> {
     mensaje:
       despues === 0
         ? "Ejemplo quitado. No se ha tocado nada tuyo."
-        : "Se ha quitado casi todo el ejemplo; revisa Ajustes.",
+        : `Se ha quitado casi todo el ejemplo. No se pudo borrar: ${fallos.join("; ") || "motivo desconocido"}`,
   };
 }
