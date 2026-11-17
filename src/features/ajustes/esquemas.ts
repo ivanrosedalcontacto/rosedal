@@ -1,18 +1,8 @@
 import { z } from "zod";
+import { COLORES_PILAR, type ColorPilar } from "@/shared/constants/colores-pilar";
 
-export const COLORES_PILAR = ["verde", "menta", "oliva", "rosa", "frambuesa", "melocoton", "salvia", "malva"] as const;
-
-/** Tonos pastel de la paleta; se muestran como un punto junto al nombre. */
-export const HEX_PILAR: Record<(typeof COLORES_PILAR)[number], string> = {
-  verde: "#A9CBB0",
-  menta: "#8FCDB8",
-  oliva: "#C5CF9E",
-  rosa: "#EDB1BF",
-  frambuesa: "#D98BA3",
-  melocoton: "#F4C6A8",
-  salvia: "#BFD3C1",
-  malva: "#D6B8D2",
-};
+// Reexportados para que los consumidores de esta feature no dependan de shared directamente.
+export { COLORES_PILAR, HEX_PILAR } from "@/shared/constants/colores-pilar";
 
 export const esquemaPilar = z.object({
   nombre: z.string().trim().min(1, "Ponle un nombre al pilar.").max(80),
@@ -30,7 +20,7 @@ export type Pilar = {
   id: string;
   nombre: string;
   descripcion: string;
-  color: (typeof COLORES_PILAR)[number];
+  color: ColorPilar;
   orden: number;
   archivado: boolean;
 };

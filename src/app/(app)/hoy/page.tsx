@@ -1,4 +1,5 @@
 import { BotonesCaptura } from "@/features/captura/botones-captura";
+import { Hoy as BloquesHoy } from "@/features/hoy/hoy";
 
 function fechaDeHoy(): string {
   const texto = new Intl.DateTimeFormat("es-ES", {
@@ -18,9 +19,7 @@ export default function Hoy() {
         <p className="mt-1 text-tinta-suave">{fechaDeHoy()}</p>
       </div>
       <BotonesCaptura />
-      <p className="rounded-tarjeta bg-verde-50 px-4 py-6 text-tinta-suave">
-        Aquí verás lo que preparar, lo que sale hoy y tu próximo hito. Llegará con el calendario.
-      </p>
+      <BloquesHoy />
     </div>
   );
 }

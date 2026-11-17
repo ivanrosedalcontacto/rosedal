@@ -49,6 +49,14 @@ export const ETIQUETA_DIMENSION: Record<Dimension, string> = {
   problema: "Problema de la audiencia",
 };
 
+/** Columna de `ideas` que alimenta cada dimensión del brainstorming. */
+export const CAMPO_DIMENSION: Record<Dimension, "tema" | "pilar_id" | "oferta_id" | "problema_audiencia"> = {
+  tema: "tema",
+  pilar: "pilar_id",
+  oferta: "oferta_id",
+  problema: "problema_audiencia",
+};
+
 const textoOpcional = (max: number) =>
   z
     .string()
@@ -75,6 +83,7 @@ export const esquemaIdea = z.object({
   estado: z.enum(ESTADOS_IDEA),
   pilar_id: uuidOpcional,
   oferta_id: uuidOpcional,
+  lanzamiento_id: uuidOpcional,
   tema: textoOpcional(120),
   problema_audiencia: textoOpcional(300),
   procedencia: textoOpcional(200),

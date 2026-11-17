@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cerrarSesion } from "@/app/(auth)/login/acciones";
 import { MenuCaptura } from "@/features/captura/menu-captura";
+import { BuscadorGlobal } from "@/features/mejoras/buscador-global";
 import { GRUPOS_NAV } from "@/shared/constants/secciones";
 
 export function NavLateral() {
@@ -14,6 +15,7 @@ export function NavLateral() {
         Rosedal
       </Link>
       <MenuCaptura variante="lateral" />
+      <BuscadorGlobal />
       <nav aria-label="Principal" className="flex flex-1 flex-col gap-4">
         {GRUPOS_NAV.map((g, i) => (
           <div key={g.titulo ?? i} className={g.titulo === null && i > 0 ? "mt-auto" : ""}>

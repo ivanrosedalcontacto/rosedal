@@ -1,10 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { Resultado } from "@/shared/components/mensaje-resultado";
 import { crearClienteServidor } from "@/shared/lib/supabase/servidor";
-import { DIMENSIONES, TIPOS_ANGULO, esquemaIdea, esquemaPregunta } from "./esquemas";
+import { CAMPO_DIMENSION, DIMENSIONES, TIPOS_ANGULO, esquemaIdea, esquemaPregunta } from "./esquemas";
 
 const texto = (d: FormData, k: string) => (d.get(k) ?? "").toString();
 const uuid = z.string().uuid();
@@ -18,7 +19,7 @@ export async function guardarIdea(id: string, _p: Resultado, d: FormData): Promi
   const idValido = uuid.safeParse(id);
   if (!idValido.success) return { error: "Idea no válida." };
   const r = esquemaIdea.safeParse(Object.fromEntries(
-    ["texto", "tipo", "estado", "pilar_id", "oferta_id", "tema", "problema_audiencia", "procedencia",
+    ["texto", "tipo", "estado", "pilar_id", "oferta_id", "lanzamiento_id", "tema", "problema_audiencia", "procedencia",
       "relevancia", "demanda", "minutos_preparacion", "notas"].map((k) => [k, texto(d, k)]),
   ));
   if (!r.success) return { error: r.error.issues[0]?.message ?? "Revisa los datos." };
@@ -69,16 +70,15 @@ export async function cambiarEstadoIdea(id: string, estado: "pendiente" | "archi
   refrescar(idValido.data);
 }
 
-/** Envía la idea a la papelera (borrado lógico). */
+/** Envía la idea a la papelera (borrado lógico) y vuelve a la bandeja. */
 export async function quitarIdea(id: string) {
   const idValido = uuid.safeParse(id);
   if (!idValido.success) return;
   const supabase = await crearClienteServidor();
   await supabase.from("ideas").update({ eliminado_en: new Date().toISOString() }).eq("id", idValido.data);
-  refrescar();
+  revalidatePath("/ideas");
+  redirect("/ideas");
 }
-
-const CAMPO_DIMENSION = { tema: "tema", pilar: "pilar_id", oferta: "oferta_id", problema: "problema_audiencia" } as const;
 
 function valorDimension(por: string, valor: string): { campo: string; valor: string | null } | null {
   const dim = z.enum(DIMENSIONES).safeParse(por);

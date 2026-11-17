@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 import { botonPrincipal, botonSecundario, campo } from "@/shared/components/estilos";
 import { capturar } from "./acciones";
 import { useCaptura } from "./almacen";
+import { encolar } from "./cola";
 import { INFO_CAPTURA, type TipoCaptura } from "./tipos";
 
 const clave = (tipo: TipoCaptura) => `rosedal-borrador-${tipo}`;
@@ -41,6 +42,7 @@ function Contenido({ tipo }: { tipo: TipoCaptura }) {
   const [error, setError] = useState<string | null>(null);
   const [guardadas, setGuardadas] = useState(0);
   const [guardadoFinal, setGuardadoFinal] = useState(false);
+  const [pendienteDeGuardar, setPendienteDeGuardar] = useState(false);
   const [pendiente, empezar] = useTransition();
   const areaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -61,6 +63,15 @@ function Contenido({ tipo }: { tipo: TipoCaptura }) {
     empezar(async () => {
       const r = await capturar(tipo, texto);
       if (r.error) {
+        // Si no hay red, la captura se guarda en el dispositivo y se envía al recuperar la conexión.
+        if (typeof navigator !== "undefined" && !navigator.onLine) {
+          encolar(tipo, texto);
+          guardarBorrador(tipo, "");
+          setTexto("");
+          setError(null);
+          setPendienteDeGuardar(true);
+          return;
+        }
         setError(r.error);
         return;
       }
@@ -104,6 +115,15 @@ function Contenido({ tipo }: { tipo: TipoCaptura }) {
                 Listo
               </button>
             </div>
+          </div>
+        ) : pendienteDeGuardar ? (
+          <div className="mt-4 flex flex-col gap-4">
+            <p role="status" className="rounded-boton bg-aviso-fondo px-3 py-3 text-aviso">
+              Pendiente de guardar: se enviará en cuanto vuelvas a tener conexión.
+            </p>
+            <button type="button" onClick={cerrar} className={`${botonPrincipal} w-full`}>
+              Entendido
+            </button>
           </div>
         ) : (
           <>

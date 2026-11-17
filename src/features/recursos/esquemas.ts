@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const TIPOS_RECURSO = ["tono", "cta", "testimonio", "plano", "enlace_venta"] as const;
+export const TIPOS_RECURSO = ["tono", "cta", "testimonio", "plano", "enlace_venta", "gancho", "hashtags"] as const;
 export type TipoRecurso = (typeof TIPOS_RECURSO)[number];
 
 export const INFO_TIPO: Record<TipoRecurso, { plural: string; singular: string; ayuda: string }> = {
@@ -9,6 +9,8 @@ export const INFO_TIPO: Record<TipoRecurso, { plural: string; singular: string; 
   testimonio: { plural: "Testimonios", singular: "testimonio", ayuda: "Solo se usan los que tienes autorizados." },
   plano: { plural: "Planos recurrentes", singular: "plano", ayuda: "Descripciones escritas de planos que repites al grabar." },
   enlace_venta: { plural: "Enlaces de venta", singular: "enlace de venta", ayuda: "Páginas de compra o reserva." },
+  gancho: { plural: "Ganchos", singular: "gancho", ayuda: "Primeras frases que abren un reel. Se insertan en el guion." },
+  hashtags: { plural: "Grupos de hashtags", singular: "grupo de hashtags", ayuda: "Conjuntos de hashtags para copiar y pegar." },
 };
 
 export const esquemaRecurso = z.object({
