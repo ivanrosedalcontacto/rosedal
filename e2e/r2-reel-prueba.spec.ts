@@ -30,7 +30,7 @@ test("R2: planificar un reel de prueba y registrar su publicación", async ({ pa
   await expect(form.getByRole("button", { name: "Planificar reel de prueba" })).toBeEnabled({ timeout: 30_000 });
 
   // 3. Abrir la ficha creada y comprobar sus datos.
-  await page.goto("/biblioteca");
+  await page.goto("/biblioteca?vista=tablero");
   const reel = page.locator("a").filter({ hasText: frase }).first();
   await reel.click();
   await page.waitForURL("**/piezas/**");
@@ -54,7 +54,7 @@ test("R2: planificar un reel de prueba y registrar su publicación", async ({ pa
   await expect(page.locator("article").filter({ hasText: frase })).toHaveCount(0);
 
   // 6. Volver al reel y marcarlo como publicado con fecha de hoy y un enlace.
-  await page.goto("/biblioteca");
+  await page.goto("/biblioteca?vista=tablero");
   await page.locator("a").filter({ hasText: frase }).first().click();
   await page.getByLabel("Fecha real").fill(hoy);
   await page.getByLabel("Enlace publicado (opcional)").fill("https://ejemplo.com/reel-de-prueba");

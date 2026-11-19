@@ -49,7 +49,7 @@ test("R3: dos guiones, una entrada; adaptar a un correo", async ({ page, isMobil
   await expect(page.locator("article:visible").filter({ hasText: reel, hasNotText: "adaptación" })).toHaveCount(1);
 
   // 6. Crear la adaptación: se abre un correo nuevo en borrador.
-  await page.goto("/biblioteca");
+  await page.goto("/biblioteca?vista=tablero");
   await page.locator("a").filter({ hasText: reel, hasNotText: "adaptación" }).first().click();
   await page.getByRole("button", { name: "Crear adaptación" }).click();
   await expect(page.getByRole("heading", { level: 1, name: /adaptación/ })).toBeVisible({ timeout: 30_000 });
@@ -68,7 +68,7 @@ test("R3: dos guiones, una entrada; adaptar a un correo", async ({ page, isMobil
   await expect(page.locator('input[name="fecha_prevista"]').first()).toHaveValue(diasDeEstaSemana().jueves, { timeout: 30_000 });
 
   // 8. El reel conserva su finalidad, su fecha y su estado, y lista el correo.
-  await page.goto("/biblioteca");
+  await page.goto("/biblioteca?vista=tablero");
   await page.locator("a").filter({ hasText: reel, hasNotText: "adaptación" }).first().click();
   await expect(page.getByLabel("Finalidad")).toHaveValue("position");
   await expect(page.getByRole("link", { name: /Derivadas de esta pieza/ }).or(page.getByText("Derivadas de esta pieza")).first()).toBeVisible();

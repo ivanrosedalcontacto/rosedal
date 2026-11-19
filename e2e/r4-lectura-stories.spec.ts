@@ -4,7 +4,7 @@ import { entrar } from "./ayuda";
 /** Modo lectura de stories a pantalla completa (docs/01-pantallas-contenido.md, «Leer la secuencia»). */
 test("Lectura de stories a pantalla completa: Anterior, Siguiente y cerrar", async ({ page }) => {
   await entrar(page);
-  await page.goto("/biblioteca");
+  await page.goto("/biblioteca?vista=tablero");
   await page.locator("a").filter({ hasText: "Curso o asesoría: os leo" }).first().click();
   await page.waitForURL("**/piezas/**");
 

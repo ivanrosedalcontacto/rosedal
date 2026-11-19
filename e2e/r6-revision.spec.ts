@@ -31,7 +31,7 @@ test("R6: reprogramar, publicar otro día y consultar resultados", async ({ page
   await expect(page.locator("article:visible").filter({ hasText: titulo }).first()).toBeVisible({ timeout: 30_000 });
 
   // 3. La ficha muestra la nueva fecha y el historial del cambio.
-  await page.goto("/biblioteca");
+  await page.goto("/biblioteca?vista=tablero");
   await page.locator("a").filter({ hasText: titulo }).first().click();
   await expect(page.getByLabel("Fecha prevista").first()).toHaveValue(miercoles);
   const historial = page.locator("section").filter({ hasText: "Historial de fechas" }).first();
@@ -79,7 +79,7 @@ test("R6: reprogramar, publicar otro día y consultar resultados", async ({ page
   await expect(trasRecargar.getByLabel("Respuestas")).toHaveValue("");
 
   // 9. La ficha conserva la fecha prevista, el historial, la real y el enlace.
-  await page.goto("/biblioteca");
+  await page.goto("/biblioteca?vista=tablero");
   await page.locator("a").filter({ hasText: titulo }).first().click();
   await expect(page.getByText(/Publicado el/).first()).toContainText(`prevista: ${miercoles}`);
   await expect(page.getByRole("link", { name: "Ver la publicación" })).toHaveAttribute("href", "https://ejemplo.com/publicada");

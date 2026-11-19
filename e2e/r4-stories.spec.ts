@@ -11,7 +11,7 @@ test("R4: reordenar una secuencia de stories", async ({ page }) => {
   await entrar(page);
 
   // 1. Abrir la secuencia del ejemplo.
-  await page.goto("/biblioteca");
+  await page.goto("/biblioteca?vista=tablero");
   await page.locator("a").filter({ hasText: titulo }).first().click();
   await expect(page.getByRole("heading", { name: titulo })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Story 1", exact: true })).toBeVisible();
@@ -59,7 +59,7 @@ test("R4: reordenar una secuencia de stories", async ({ page }) => {
   await expect(page.locator("p:visible").filter({ hasText: /^Stories ·/ })).toHaveCount(1);
 
   // 7. Guardar la estructura como plantilla y crear una secuencia nueva desde ella.
-  await page.goto("/biblioteca");
+  await page.goto("/biblioteca?vista=tablero");
   await page.locator("a").filter({ hasText: titulo }).first().click();
   await page.getByLabel("Guardar la estructura como plantilla").fill("Estructura de prueba");
   await page.getByRole("button", { name: "Guardar estructura" }).click();

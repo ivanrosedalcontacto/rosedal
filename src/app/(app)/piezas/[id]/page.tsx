@@ -76,7 +76,7 @@ export default async function FichaPieza({ params }: { params: Promise<{ id: str
     desarrollo: elegida?.desarrollo,
   };
   return <div className="mx-auto max-w-[1200px] px-4 py-8 md:px-10 md:py-12">
-    <Link href="/biblioteca" className="text-sm text-verde-700">← Biblioteca</Link>
+    <Link href={`/biblioteca/${pieza.pilar_id ?? "sin-pilar"}`} className="text-sm text-verde-700">← {pieza.pilar_id ? (pilares.find((p) => p.id === pieza.pilar_id)?.nombre ?? "Biblioteca") : "Sin pilar"}</Link>
     <header className="mt-3 flex flex-col gap-3 border-b border-borde pb-6">
       <div className="flex flex-wrap items-start justify-between gap-3"><div><h1 className="font-serif text-2xl md:text-[28px]">{pieza.titulo}</h1><div className="mt-2"><EtiquetasPieza formato={pieza.formato} estado={pieza.estado} finalidad={pieza.finalidad} /></div></div>
         <div className="flex flex-wrap gap-2">

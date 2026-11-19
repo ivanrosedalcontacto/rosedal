@@ -35,6 +35,10 @@ async function contextoDeLaPieza(sp: Parametros): Promise<string | undefined> {
     const { data } = await supabase.from("lanzamientos").select("nombre").eq("id", sp.lanzamiento).maybeSingle();
     if (data) partes.push(`del lanzamiento «${data.nombre}»`);
   }
+  if (sp.pilar && uuid.safeParse(sp.pilar).success) {
+    const { data } = await supabase.from("pilares").select("nombre").eq("id", sp.pilar).maybeSingle();
+    if (data) partes.push(`en el pilar «${data.nombre}»`);
+  }
   if (partes.length === 0) return undefined;
   const fecha = sp.fecha && esFecha(sp.fecha) ? ` con fecha prevista ${sp.fecha}` : "";
   return `Vas a crear una pieza ${partes.join(" ")}${fecha}.`;
@@ -44,6 +48,7 @@ export default async function NuevaPieza({ searchParams }: { searchParams: Promi
   const sp = await searchParams;
   const formato = (FORMATOS_PIEZA as readonly string[]).includes(sp.formato ?? "") ? (sp.formato as FormatoPieza) : undefined;
   const contexto = await contextoDeLaPieza(sp);
+  const pilarValido = sp.pilar && uuid.safeParse(sp.pilar).success ? sp.pilar : undefined;
   const supabase = await crearClienteServidor();
   const { data: plantillasR } = await supabase
     .from("plantillas")
@@ -53,7 +58,7 @@ export default async function NuevaPieza({ searchParams }: { searchParams: Promi
   const plantillas = (plantillasR ?? []) as { id: string; nombre: string; descripcion: string }[];
   return (
     <div className="mx-auto flex max-w-[640px] flex-col gap-6 px-4 py-8 md:py-12">
-      <Link href="/biblioteca" className="text-sm text-verde-700">← Biblioteca</Link>
+      <Link href={pilarValido ? `/biblioteca/${pilarValido}` : "/biblioteca"} className="text-sm text-verde-700">← Biblioteca</Link>
       <div>
         <h1 className="font-serif text-2xl">Nueva pieza</h1>
         <p className="mt-2 text-tinta-suave">Empieza con una idea y dale el formato que necesitas.</p>
@@ -66,7 +71,7 @@ export default async function NuevaPieza({ searchParams }: { searchParams: Promi
         lanzamientoId={sp.lanzamiento}
         faseId={sp.fase}
         fechaPrevista={sp.fecha && esFecha(sp.fecha) ? sp.fecha : undefined}
-        pilarId={sp.pilar && uuid.safeParse(sp.pilar).success ? sp.pilar : undefined}
+        pilarId={pilarValido}
         contexto={contexto}
       />
       {plantillas.length > 0 && (

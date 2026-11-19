@@ -197,6 +197,14 @@ e2e actualizadas (R1 sin buscador), `docs/01`, `02`, `03`, `06`, `continuar.md` 
 - **Fix**: `test.setTimeout(120_000)` en esas dos pruebas.
 - **Aplicar en**: recorridos e2e largos.
 
+### 2026-11-20: La tanda e2e completa satura el servidor de desarrollo
+- **Error**: con 8 pruebas seguidas en ordenador, R4 y R6 fallaron esperando páginas (R6 tardó 2,5 min); solas pasaron.
+- **Fix**: lanzar la tanda en dos tramos de 4 (cada uno empieza por `00-ejemplo`), como pide `CLAUDE.md` para procesos largos.
+- **Aplicar en**: toda ejecución de e2e en esta máquina.
+
+### 2026-11-20: Fases 3 y 4 hechas
+- Las pruebas que abrían piezas desde `/biblioteca` ahora usan `/biblioteca?vista=tablero` (la portada son carpetas de pilar). Prueba nueva: `e2e/r8-biblioteca-pilares.spec.ts`.
+
 ---
 
 *PRP pendiente de aprobación. No se ha modificado código.*
