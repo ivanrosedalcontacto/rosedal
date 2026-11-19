@@ -199,7 +199,7 @@ export async function anadirPasoExistente(secuenciaId: string, _p: Resultado, d:
   } else if (fecha.data.fecha_prevista) {
     await supabase
       .from("piezas")
-      .update({ fecha_prevista: fecha.data.fecha_prevista, estado: "planificado" })
+      .update({ fecha_prevista: fecha.data.fecha_prevista })
       .eq("id", piezaId.data)
       .is("publicado_snapshot", null);
   }
@@ -302,16 +302,12 @@ export async function guardarFechaPaso(secuenciaId: string, pasoId: string, _p: 
   const supabase = await crearClienteServidor();
   const { data: pasoR } = await supabase
     .from("secuencia_pasos")
-    .select("pieza_id,piezas(estado)")
+    .select("pieza_id")
     .eq("id", paso.data)
     .eq("secuencia_id", secuencia.data)
     .maybeSingle();
   if (!pasoR) return { error: "No encontramos el paso." };
-  const relacion = pasoR.piezas as unknown as { estado: string } | { estado: string }[] | null;
-  const pieza = Array.isArray(relacion) ? relacion[0] ?? null : relacion;
   const valores: Record<string, unknown> = { fecha_prevista: r.data.fecha_prevista };
-  if (r.data.fecha_prevista) valores.estado = "planificado";
-  else if (pieza?.estado === "planificado") valores.estado = "borrador";
   const { error } = await supabase
     .from("piezas")
     .update(valores)

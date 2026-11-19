@@ -39,7 +39,6 @@ export async function Hoy() {
   const [
     { data: piezasR },
     { data: versionesR },
-    { data: sesionesR },
     { data: hitosR },
     { data: lanzamientosR },
     { data: fasesR },
@@ -50,7 +49,6 @@ export async function Hoy() {
   ] = await Promise.all([
     supabase.from("piezas").select(CAMPOS_PIEZA).is("eliminado_en", null),
     supabase.from("pieza_versiones").select("pieza_id,tipo,gancho,desarrollo").eq("tipo", "guion"),
-    supabase.from("sesiones_grabacion").select("id,nombre,fecha").not("fecha", "is", null).gte("fecha", hoy).order("fecha"),
     supabase.from("lanzamiento_hitos").select("id,titulo,fecha,hecho,lanzamiento_id,fase_id").eq("hecho", false).gte("fecha", hoy).order("fecha"),
     supabase.from("lanzamientos").select("id,nombre"),
     supabase.from("lanzamiento_fases").select("id,nombre,tipo,fecha_inicio,fecha_fin,lanzamiento_id"),
@@ -83,7 +81,7 @@ export async function Hoy() {
   const preparar = piezas
     .filter(
       (p) =>
-        ["borrador", "en_preparacion"].includes(p.estado) &&
+        ["borrador"].includes(p.estado) &&
         p.fecha_prevista !== null &&
         p.fecha_prevista >= hoy &&
         p.fecha_prevista <= dentroDeSiete,
@@ -91,7 +89,6 @@ export async function Hoy() {
     .sort((a, b) => (a.fecha_prevista ?? "").localeCompare(b.fecha_prevista ?? ""));
   const paraRetomar = piezas.filter((p) => p.retomar_el !== null && p.retomar_el <= hoy && p.estado !== "publicado");
 
-  const sesion = ((sesionesR ?? []) as { id: string; nombre: string; fecha: string }[])[0];
   const hito = ((hitosR ?? []) as { id: string; titulo: string; fecha: string; lanzamiento_id: string; fase_id: string | null }[])[0];
   const faseDelHito = hito?.fase_id ? fases.find((f) => f.id === hito.fase_id) : undefined;
   const faseEnCurso = hito
@@ -171,7 +168,7 @@ export async function Hoy() {
 
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-semibold">Tengo que preparar</h2>
-        {preparar.length === 0 && paraRetomar.length === 0 && !sesion ? (
+        {preparar.length === 0 && paraRetomar.length === 0 ? (
           <p className="rounded-tarjeta bg-verde-50 px-4 py-6 text-tinta-suave">No hay nada vencido en los próximos siete días.</p>
         ) : (
           <ul className="flex flex-col gap-2">
@@ -179,7 +176,7 @@ export async function Hoy() {
               const faltas: string[] = [];
               if (TIENEN_GUION.includes(pieza.formato) && !guionPorPieza.has(pieza.id)) faltas.push("Sin guion");
               if (faltaCta(pieza)) faltas.push("Falta la llamada a la acción");
-              if (SE_GRABAN.includes(pieza.formato) && !pieza.grabado) faltas.push("Sin grabar");
+              if (SE_GRABAN.includes(pieza.formato) && pieza.estado === "borrador") faltas.push("Sin grabar");
               return (
                 <li key={pieza.id} className="flex flex-wrap items-center justify-between gap-2 rounded-tarjeta border border-borde p-3">
                   <div className="min-w-0">
@@ -203,14 +200,6 @@ export async function Hoy() {
                 <Etiqueta tono="aviso">Marcada para retomar</Etiqueta>
               </li>
             ))}
-            {sesion && (
-              <li className="rounded-tarjeta border border-borde p-3">
-                <Link href="/grabacion" className="font-medium hover:text-verde-700">
-                  {sesion.nombre}
-                </Link>
-                <p className="mt-1 text-xs text-tinta-suave">Próximo día de grabación: {formatearFecha(sesion.fecha)}</p>
-              </li>
-            )}
           </ul>
         )}
         {preparar.length > 5 && (

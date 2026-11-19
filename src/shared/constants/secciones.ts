@@ -2,7 +2,6 @@ import {
   BookOpen,
   CalendarDays,
   ClipboardCheck,
-  Film,
   Grid3x3,
   Lightbulb,
   Mail,
@@ -44,7 +43,6 @@ export const GRUPOS_NAV: GrupoSecciones[] = [
     titulo: "Crear",
     secciones: [
       s("/biblioteca", "Biblioteca", BookOpen, "Todas tus piezas en lista y tablero."),
-      s("/grabacion", "Grabación", Film, "Tus días de grabación."),
       s("/email", "Email", Mail, "Ideas de email, broadcasts y secuencias."),
     ],
   },

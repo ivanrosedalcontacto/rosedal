@@ -46,7 +46,7 @@ export default async function FichaSecuencia({ params }: { params: Promise<{ id:
   const yaEnSecuencia = new Set((todosPasosR ?? []).map((p) => p.pieza_id as string));
   const correosLibres = ((correosR ?? []) as { id: string; titulo: string; estado: string }[]).filter((c) => !yaEnSecuencia.has(c.id));
   const relativa = secuencia.programacion === "relativa";
-  const porEscribir = pasos.filter((p) => ["borrador", "en_preparacion"].includes(p.pieza.estado)).length;
+  const porEscribir = pasos.filter((p) => ["borrador"].includes(p.pieza.estado)).length;
 
   return (
     <div className="mx-auto flex max-w-[1100px] flex-col gap-6 px-4 py-8 md:px-10 md:py-12">

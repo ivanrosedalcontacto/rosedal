@@ -8,7 +8,7 @@ import {
   sembrarPiezasLanzamiento,
   sembrarPublicados,
 } from "./sembrar-piezas";
-import { sembrarFrases, sembrarGrabacion, sembrarIdeas, sembrarSecuencia } from "./sembrar-resto";
+import { sembrarFrases, sembrarGrabada, sembrarIdeas, sembrarSecuencia } from "./sembrar-resto";
 
 type Cliente = Awaited<ReturnType<typeof crearClienteServidor>>;
 
@@ -188,7 +188,7 @@ export async function sembrarEjemplo(supabase: Cliente): Promise<ResultadoDemo> 
   await sembrarIdeas(supabase, { ofertas, pilares, lanzamiento });
 
   const { data: piezasDemo } = await supabase.from("piezas").select("id,titulo").eq("es_demo", true);
-  await sembrarGrabacion(supabase, { dia, piezas: (piezasDemo ?? []) as { id: string; titulo: string }[] });
+  await sembrarGrabada(supabase, (piezasDemo ?? []) as { id: string; titulo: string }[]);
   await supabase.from("recursos_marca").insert(RECURSOS_DEMO.map((r) => ({ ...r, es_demo: true })));
 
   return { ok: true, mensaje: "Ejemplo cargado. Está en Ajustes, en «Datos de ejemplo»." };

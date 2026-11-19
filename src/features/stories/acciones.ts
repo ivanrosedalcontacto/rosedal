@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { Resultado } from "@/shared/components/mensaje-resultado";
 import { crearClienteServidor } from "@/shared/lib/supabase/servidor";
@@ -15,11 +14,6 @@ const esquemaTarjeta = z.object({
   visual: z.string().max(2000).default(""),
   interaccion: z.enum(["ninguna", "encuesta", "pregunta", "enlace", "cta"]),
   interaccion_detalle: z.string().max(2000).default(""),
-});
-const esquemaSesion = z.object({
-  nombre: z.string().trim().min(1, "Ponle un nombre a la sesión.").max(200),
-  fecha: z.string().transform((v) => (v === "" ? null : v)).pipe(z.string().date().nullable()),
-  notas: z.string().max(5000).default(""),
 });
 
 function refrescarStories(id: string) {
@@ -87,19 +81,6 @@ export async function duplicarTarjeta(piezaId: string, tarjetaId: string) {
   refrescarStories(pieza.data);
 }
 
-export async function crearSesion(_p: Resultado, d: FormData): Promise<Resultado> {
-  const r = esquemaSesion.safeParse({ nombre: texto(d, "nombre"), fecha: texto(d, "fecha"), notas: texto(d, "notas") });
-  const ids = z.array(uuid).safeParse(d.getAll("pieza_ids").map(String));
-  if (!r.success) return { error: r.error.issues[0]?.message ?? "Revisa la sesión." };
-  if (!ids.success) return { error: "Revisa las piezas de la sesión." };
-  const supabase = await crearClienteServidor();
-  const { data, error } = await supabase.from("sesiones_grabacion").insert(r.data).select("id").single();
-  if (error || !data) return { error: "No se pudo crear la sesión." };
-  if (ids.data.length) await supabase.from("sesion_piezas").insert(ids.data.map((pieza_id, orden) => ({ sesion_id: data.id, pieza_id, orden })));
-  revalidatePath("/grabacion");
-  redirect(`/grabacion/${data.id}`);
-}
-
 /** Guarda la estructura de la secuencia como plantilla, sin el texto concreto. */
 export async function guardarEstructuraComoPlantilla(piezaId: string, _p: Resultado, d: FormData): Promise<Resultado> {
   const pieza = uuid.safeParse(piezaId);
@@ -132,21 +113,4 @@ export async function guardarEstructuraComoPlantilla(piezaId: string, _p: Result
   revalidatePath("/ajustes");
   refrescarStories(pieza.data);
   return { error: null, ok: true };
-}
-
-export async function alternarPreparadoEnSesion(sesionId: string, piezaId: string, preparado: boolean) {  const sesion = uuid.safeParse(sesionId); const pieza = uuid.safeParse(piezaId);
-  if (!sesion.success || !pieza.success) return;
-  const supabase = await crearClienteServidor();
-  await supabase.from("sesion_piezas").update({ preparado }).eq("sesion_id", sesion.data).eq("pieza_id", pieza.data);
-  revalidatePath(`/grabacion/${sesion.data}`);
-}
-
-export async function alternarGrabadaEnSesion(sesionId: string, piezaId: string, grabado: boolean) {
-  const sesion = uuid.safeParse(sesionId); const pieza = uuid.safeParse(piezaId);
-  if (!sesion.success || !pieza.success) return;
-  const supabase = await crearClienteServidor();
-  await supabase.from("piezas").update({ grabado, grabado_en: grabado ? new Date().toISOString() : null }).eq("id", pieza.data);
-  revalidatePath(`/grabacion/${sesion.data}`);
-  revalidatePath("/grabacion");
-  revalidatePath(`/piezas/${pieza.data}`);
 }

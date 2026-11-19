@@ -79,7 +79,7 @@ export async function Mapa({ sp }: { sp: Parametros }) {
     const fecha = fechaDeMapa(p);
     if (!fecha || fecha < rango.desde || fecha > rango.hasta) return false;
     if (estado === "publicadas" && p.estado !== "publicado") return false;
-    if (estado === "planificadas" && !["planificado", "listo"].includes(p.estado)) return false;
+    if (estado === "planificadas" && p.estado === "publicado") return false;
     if (lanzamiento && p.lanzamiento_id !== lanzamiento) return false;
     return true;
   });
@@ -156,7 +156,7 @@ export async function Mapa({ sp }: { sp: Parametros }) {
           <select name="estado" defaultValue={estado} className="mt-1 w-full rounded-boton border border-borde bg-fondo px-3 py-2">
             <option value="todas">Todas</option>
             <option value="publicadas">Publicadas</option>
-            <option value="planificadas">Planificadas</option>
+            <option value="planificadas">Programadas</option>
           </select>
         </label>
         <label className="text-sm font-medium">

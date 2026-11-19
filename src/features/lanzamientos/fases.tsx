@@ -10,7 +10,7 @@ import { ETIQUETA_FASE, type Fase, type FilaPieza } from "./esquemas";
 type PiezaLibre = { id: string; titulo: string; formato: string; fecha_prevista: string | null };
 
 function Pieza({ lanzamientoId, pieza }: { lanzamientoId: string; pieza: FilaPieza }) {
-  const porEscribir = ["borrador", "en_preparacion"].includes(pieza.estado);
+  const porEscribir = ["borrador"].includes(pieza.estado);
   return (
     <li className="flex flex-wrap items-start justify-between gap-2 rounded-boton border border-borde px-3 py-2">
       <div className="min-w-0">
@@ -41,7 +41,7 @@ function BloqueFase({
   piezas: FilaPieza[];
   piezasLibres: PiezaLibre[];
 }) {
-  const porEscribir = piezas.filter((p) => ["borrador", "en_preparacion"].includes(p.estado)).length;
+  const porEscribir = piezas.filter((p) => ["borrador"].includes(p.estado)).length;
   const fechaNueva = fase.fecha_inicio ?? "";
   const hrefNueva = `/piezas/nueva?lanzamiento=${lanzamientoId}&fase=${fase.id}${fechaNueva ? `&fecha=${fechaNueva}` : ""}`;
   return (

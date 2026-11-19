@@ -14,7 +14,6 @@ function refrescar() {
   revalidatePath("/mapa");
   revalidatePath("/ideas");
   revalidatePath("/frases");
-  revalidatePath("/grabacion");
   revalidatePath("/email");
   revalidatePath("/ofertas");
   revalidatePath("/lanzamientos");

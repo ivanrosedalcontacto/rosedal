@@ -5,7 +5,7 @@ import { hoyMadrid, sumarDias } from "@/shared/lib/fechas";
 import { crearClienteServidor } from "@/shared/lib/supabase/servidor";
 import { EtiquetasPieza } from "./etiquetas-piezas";
 import { SelectorEstadoTablero } from "./controles-clientes";
-import { CANALES_PIEZA, ESTADOS_PIEZA, ETIQUETA_CANAL, ETIQUETA_ESTADO, ETIQUETA_FINALIDAD, ETIQUETA_FORMATO, FINALIDADES, FORMATOS_PIEZA, faltaCta, type Pieza } from "./esquemas";
+import { CANALES_PIEZA, ESTADOS_GRABADOS, ESTADOS_PIEZA, ETIQUETA_CANAL, ETIQUETA_ESTADO, ETIQUETA_FINALIDAD, ETIQUETA_FORMATO, FINALIDADES, FORMATOS_PIEZA, faltaCta, type Pieza } from "./esquemas";
 
 type Parametros = Record<string, string | string[] | undefined>;
 const valor = (p: Parametros, clave: string) => (typeof p[clave] === "string" ? p[clave] : "");
@@ -42,8 +42,8 @@ export async function Biblioteca({ sp }: { sp: Parametros }) {
   if (idea) consulta = consulta.eq("idea_id", idea);
   if (lanzamiento === "habitual") consulta = consulta.is("lanzamiento_id", null);
   else if (lanzamiento) consulta = consulta.eq("lanzamiento_id", lanzamiento);
-  if (grabado === "si") consulta = consulta.eq("grabado", true);
-  if (grabado === "no") consulta = consulta.eq("grabado", false);
+  if (grabado === "si") consulta = consulta.in("estado", [...ESTADOS_GRABADOS]);
+  if (grabado === "no") consulta = consulta.eq("estado", "borrador");
   if (/^\d{4}-\d{2}-\d{2}$/.test(desde)) consulta = consulta.gte("fecha_prevista", desde);
   if (/^\d{4}-\d{2}-\d{2}$/.test(hasta)) consulta = consulta.lte("fecha_prevista", hasta);
   if (q) consulta = consulta.or(`titulo.ilike.%${q}%,texto_publicacion.ilike.%${q}%,texto_en_pantalla.ilike.%${q}%,notas.ilike.%${q}%`);
@@ -80,7 +80,7 @@ export async function Biblioteca({ sp }: { sp: Parametros }) {
       <h2 className="line-clamp-2 font-semibold">{pieza.titulo}</h2><div className="mt-2"><EtiquetasPieza formato={pieza.formato} estado={pieza.estado} finalidad={pieza.finalidad} /></div>
       {pilar && <EtiquetaPilar nombre={pilar.nombre} color={pilar.color} className="mt-2" />}
       {enLanzamiento && <p className="mt-2 text-xs text-tinta-suave">Lanzamiento: {enLanzamiento.nombre}</p>}
-      {faltaCta(pieza) && ["listo", "planificado", "publicado"].includes(pieza.estado) && <p className="mt-2 text-sm font-medium text-aviso">Falta la llamada a la acción</p>}
+      {faltaCta(pieza) && ["editado", "publicado"].includes(pieza.estado) && <p className="mt-2 text-sm font-medium text-aviso">Falta la llamada a la acción</p>}
       <p className="mt-2 text-sm text-tinta-suave">{pieza.fecha_prevista ? `Prevista: ${pieza.fecha_prevista}` : "Sin fecha prevista"} · {ETIQUETA_CANAL[pieza.canal]}</p>
     </Link>;
   });
@@ -131,7 +131,7 @@ export async function Biblioteca({ sp }: { sp: Parametros }) {
     </form>
     {piezas.length === 0 ? <div className="rounded-tarjeta bg-verde-50 px-5 py-10 text-center text-tinta-suave">Todavía no hay piezas. Crea una desde una idea o empieza una nueva.</div> :
       vista === "lista" ? <ul className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">{tarjetas.map((tarjeta) => <li key={tarjeta.key}>{tarjeta}</li>)}</ul> :
-        <div className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-4 md:mx-0 md:px-0">{ESTADOS_PIEZA.map((e) => <section key={e} className="flex w-72 shrink-0 flex-col gap-3 rounded-tarjeta bg-fondo-suave p-3"><h2 className="font-semibold">{ETIQUETA_ESTADO[e]}</h2>{piezas.filter((pieza) => pieza.estado === e).map((pieza) => <article key={pieza.id} className="rounded-tarjeta border border-borde bg-fondo p-3"><Link href={`/piezas/${pieza.id}`} className="font-semibold hover:text-verde-700">{pieza.titulo}</Link><div className="mt-2"><EtiquetasPieza formato={pieza.formato} estado={pieza.estado} finalidad={pieza.finalidad} /></div>{pieza.lanzamiento_id && lanzamientos.get(pieza.lanzamiento_id) && <p className="mt-2 text-xs text-tinta-suave">Lanzamiento: {lanzamientos.get(pieza.lanzamiento_id)?.nombre}</p>}{["borrador", "en_preparacion", "listo"].includes(pieza.estado) && <SelectorEstadoTablero piezaId={pieza.id} estado={pieza.estado} />}</article>)}</section>)}</div>}
+        <div className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-4 md:mx-0 md:px-0">{ESTADOS_PIEZA.map((e) => <section key={e} className="flex w-72 shrink-0 flex-col gap-3 rounded-tarjeta bg-fondo-suave p-3"><h2 className="font-semibold">{ETIQUETA_ESTADO[e]}</h2>{piezas.filter((pieza) => pieza.estado === e).map((pieza) => <article key={pieza.id} className="rounded-tarjeta border border-borde bg-fondo p-3"><Link href={`/piezas/${pieza.id}`} className="font-semibold hover:text-verde-700">{pieza.titulo}</Link><div className="mt-2"><EtiquetasPieza formato={pieza.formato} estado={pieza.estado} finalidad={pieza.finalidad} /></div>{pieza.lanzamiento_id && lanzamientos.get(pieza.lanzamiento_id) && <p className="mt-2 text-xs text-tinta-suave">Lanzamiento: {lanzamientos.get(pieza.lanzamiento_id)?.nombre}</p>}<SelectorEstadoTablero piezaId={pieza.id} estado={pieza.estado} formato={pieza.formato} /></article>)}</section>)}</div>}
     {paraRetomar.length > 0 && (
       <details className="rounded-tarjeta border border-borde bg-fondo-suave p-4">
         <summary className="cursor-pointer font-medium">

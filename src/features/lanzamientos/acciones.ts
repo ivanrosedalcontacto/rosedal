@@ -199,10 +199,7 @@ export async function asignarPieza(lanzamientoId: string, faseId: string, _p: Re
     lanzamiento_id: lanzamiento.data,
     fase_id: fase.data,
   };
-  if (fecha.data) {
-    valores.fecha_prevista = fecha.data;
-    valores.estado = "planificado";
-  }
+  if (fecha.data) valores.fecha_prevista = fecha.data;
   const { error } = await supabase
     .from("piezas")
     .update(valores)

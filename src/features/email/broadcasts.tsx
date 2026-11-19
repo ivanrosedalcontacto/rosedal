@@ -36,7 +36,7 @@ export async function Broadcasts({ sp }: { sp: Parametros }) {
   const supabase = await crearClienteServidor();
   let consulta = supabase.from("piezas").select(CAMPOS_CORREO).eq("formato", "email").is("eliminado_en", null);
   if (pestana === "semana") consulta = consulta.gte("fecha_prevista", lunes).lte("fecha_prevista", domingo).order("fecha_prevista");
-  else if (pestana === "sin_fecha") consulta = consulta.is("fecha_prevista", null).in("estado", ["borrador", "en_preparacion", "listo"]).order("created_at", { ascending: false });
+  else if (pestana === "sin_fecha") consulta = consulta.is("fecha_prevista", null).neq("estado", "publicado").order("created_at", { ascending: false });
   else consulta = consulta.eq("estado", "publicado").order("fecha_real", { ascending: false, nullsFirst: false });
   if (filtros.pilar) consulta = consulta.eq("pilar_id", filtros.pilar);
   if (filtros.finalidad) consulta = consulta.eq("finalidad", filtros.finalidad);

@@ -133,27 +133,8 @@ export async function sembrarIdeas(
   }
 }
 
-/** El día de grabación con sus tres piezas. */
-export async function sembrarGrabacion(
-  supabase: Cliente,
-  ctx: { dia: (n: number) => string; piezas: { id: string; titulo: string }[] },
-): Promise<void> {
-  const { data: sesionR } = await supabase
-    .from("sesiones_grabacion")
-    .insert({ es_demo: true, nombre: "Grabación de reels de lanzamiento", fecha: ctx.dia(2), notas: "" })
-    .select("id")
-    .single();
-  const sesion = sesionR?.id ?? null;
-  if (!sesion) return;
-  const elegidas = ctx.piezas.filter((p) =>
-    ["¿Curso o asesoría? Hazte esta pregunta", "Tu lunes no tiene la culpa", "El lunes no empieza el lunes"].includes(p.titulo),
-  );
-  if (elegidas.length === 0) return;
-  await supabase.from("sesion_piezas").insert(
-    elegidas.map((p, i) => ({ es_demo: true, sesion_id: sesion, pieza_id: p.id, orden: i })),
-  );
-  const yaGrabada = elegidas.find((p) => p.titulo === "Tu lunes no tiene la culpa");
-  if (yaGrabada) {
-    await supabase.from("piezas").update({ grabado: true }).eq("id", yaGrabada.id);
-  }
+/** Una pieza del ejemplo ya grabada, para que la biblioteca muestre «Ya grabadas». */
+export async function sembrarGrabada(supabase: Cliente, piezas: { id: string; titulo: string }[]): Promise<void> {
+  const yaGrabada = piezas.find((p) => p.titulo === "Tu lunes no tiene la culpa");
+  if (yaGrabada) await supabase.from("piezas").update({ estado: "grabado" }).eq("id", yaGrabada.id);
 }

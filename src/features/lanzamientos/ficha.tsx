@@ -90,7 +90,7 @@ export default async function FichaLanzamiento({ params }: { params: Promise<{ i
   const ofertas = (ofertasR ?? []) as Oferta[];
   const libres = (libresR ?? []) as { id: string; titulo: string; formato: string; fecha_prevista: string | null }[];
   const oferta = lanzamiento.oferta_id ? ofertas.find((o) => o.id === lanzamiento.oferta_id) : undefined;
-  const porEscribir = piezas.filter((p) => ["borrador", "en_preparacion"].includes(p.estado)).length;
+  const porEscribir = piezas.filter((p) => ["borrador"].includes(p.estado)).length;
   const piezasConMetricas = piezas.map((p) => ({
     titulo: p.titulo,
     formato: p.formato,

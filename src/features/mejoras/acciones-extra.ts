@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import type { Resultado } from "@/shared/components/mensaje-resultado";
 import { crearClienteServidor } from "@/shared/lib/supabase/servidor";
+import { estadoDesdeAntiguo } from "@/features/piezas/esquemas";
 import { TABLAS_Copia } from "./tablas-copia";
 
 const uuid = z.string().uuid();
@@ -85,7 +86,10 @@ export async function restaurarCopia(_p: Resultado, d: FormData): Promise<Result
   for (const tabla of TABLAS_Copia) {
     const filas = copia.data.tablas[tabla];
     if (!filas || filas.length === 0) continue;
-    const propias = filas.map((fila) => ({ ...fila, user_id: fila.user_id }));
+    // Las copias anteriores al 2026-11-19 traen los estados antiguos de las piezas.
+    const propias = filas.map((fila) =>
+      tabla === "piezas" ? { ...fila, estado: estadoDesdeAntiguo(fila.estado, fila.grabado, fila.formato) } : { ...fila },
+    );
     const { error } = await supabase.from(tabla).insert(propias as never);
     if (error) return { error: `No se pudo restaurar «${tabla}». No se ha tocado nada.` };
   }

@@ -32,7 +32,7 @@ export async function ListaLanzamientos() {
 
   const datos = lanzamientos.map((lanzamiento) => {
     const suyas = piezas.filter((p) => p.lanzamiento_id === lanzamiento.id);
-    const escritas = suyas.filter((p) => !["borrador", "en_preparacion"].includes(p.estado)).length;
+    const escritas = suyas.filter((p) => !["borrador"].includes(p.estado)).length;
     return { lanzamiento, total: suyas.length, escritas };
   });
 

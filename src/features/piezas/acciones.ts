@@ -7,7 +7,7 @@ import type { Resultado } from "@/shared/components/mensaje-resultado";
 import { crearClienteServidor } from "@/shared/lib/supabase/servidor";
 import { anotarCambioDeFecha } from "@/features/mejoras/acciones-extra";
 import { proponerMetricas } from "@/features/revision/metricas";
-import { esquemaNuevaPieza, esquemaPieza, esquemaVersion, type EstadoPieza } from "./esquemas";
+import { esquemaEstadoPieza, esquemaNuevaPieza, esquemaPieza, esquemaVersion, type EstadoPieza } from "./esquemas";
 
 const uuid = z.string().uuid();
 const texto = (d: FormData, k: string) => (d.get(k) ?? "").toString();
@@ -127,18 +127,22 @@ export async function elegirVersion(piezaId: string, versionId: string) {
   refrescar(p.data);
 }
 
-/** Cambio de columna del tablero: conserva las reglas de estado de la ficha. */
+/**
+ * Cambio de columna del tablero. Pasar a Publicado congela el contenido como en la ficha;
+ * sacar una pieza de Publicado solo se hace desde la ficha («Deshacer publicación»).
+ */
 export async function moverPiezaEnTablero(id: string, estado: EstadoPieza) {
   const pieza = uuid.safeParse(id);
-  const destino = z.enum(["borrador", "en_preparacion", "listo", "planificado", "publicado"]).safeParse(estado);
-  if (!pieza.success || !destino.success || ["planificado", "publicado"].includes(destino.data)) return;
+  const destino = esquemaEstadoPieza.safeParse(estado);
+  if (!pieza.success || !destino.success) return;
   const supabase = await crearClienteServidor();
-  await supabase.from("piezas").update({ estado: destino.data }).eq("id", pieza.data);
-  refrescar(pieza.data);
+  const { data: actual } = await supabase.from("piezas").select("estado").eq("id", pieza.data).maybeSingle();
+  if (!actual || actual.estado === "publicado") return;
+  await cambiarEstadoPieza(pieza.data, destino.data);
 }
 
 export async function cambiarEstadoPieza(id: string, estado: EstadoPieza, fechaReal?: string) {
-  const pieza = uuid.safeParse(id); const estadoValido = z.enum(["borrador", "en_preparacion", "listo", "planificado", "publicado"]).safeParse(estado);
+  const pieza = uuid.safeParse(id); const estadoValido = esquemaEstadoPieza.safeParse(estado);
   if (!pieza.success || !estadoValido.success) return;
   const supabase = await crearClienteServidor();
   const valores: Record<string, unknown> = { estado: estadoValido.data };
@@ -165,7 +169,7 @@ export async function marcarEstadoPieza(id: string, estado: EstadoPieza) {
   await cambiarEstadoPieza(id, estado);
 }
 
-/** Planificar exige una fecha para que no queden piezas planificadas sin sitio en el calendario. */
+/** Planificar es darle un día en el calendario; no cambia el estado de la pieza. */
 export async function planificarPieza(id: string, _p: Resultado, d: FormData): Promise<Resultado> {
   const pieza = uuid.safeParse(id);
   const fecha = z.string().date("Elige una fecha prevista.").safeParse(texto(d, "fecha_prevista"));
@@ -173,7 +177,7 @@ export async function planificarPieza(id: string, _p: Resultado, d: FormData): P
   if (!fecha.success) return { error: fecha.error.issues[0]?.message ?? "Elige una fecha." };
   const supabase = await crearClienteServidor();
   const { data: antes } = await supabase.from("piezas").select("fecha_prevista").eq("id", pieza.data).maybeSingle();
-  const { error } = await supabase.from("piezas").update({ estado: "planificado", fecha_prevista: fecha.data }).eq("id", pieza.data);
+  const { error } = await supabase.from("piezas").update({ fecha_prevista: fecha.data }).eq("id", pieza.data);
   if (error) return { error: "No se pudo planificar la pieza." };
   await anotarCambioDeFecha(supabase, pieza.data, antes?.fecha_prevista ?? null, fecha.data);
   refrescar(pieza.data);
@@ -227,13 +231,6 @@ export async function borrarVersion(piezaId: string, versionId: string) {
     const { data: alternativa } = await supabase.from("pieza_versiones").select("id").eq("pieza_id", pieza.data).eq("tipo", "guion").order("orden").limit(1).maybeSingle();
     if (alternativa) await supabase.from("pieza_versiones").update({ elegida: true }).eq("id", alternativa.id);
   }
-  refrescar(pieza.data);
-}
-
-export async function marcarGrabada(id: string, grabado: boolean) {
-  const pieza = uuid.safeParse(id); if (!pieza.success) return;
-  const supabase = await crearClienteServidor();
-  await supabase.from("piezas").update({ grabado, grabado_en: grabado ? new Date().toISOString() : null }).eq("id", pieza.data);
   refrescar(pieza.data);
 }
 

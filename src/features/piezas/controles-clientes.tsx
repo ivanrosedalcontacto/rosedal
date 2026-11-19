@@ -2,23 +2,22 @@
 
 import { useState } from "react";
 import { cambiarEstadoPieza, moverPiezaEnTablero } from "./acciones";
-import { ETIQUETA_ESTADO, type EstadoPieza, type VersionPieza } from "./esquemas";
+import { ETIQUETA_ESTADO, estadosDeFormato, esquemaEstadoPieza, type EstadoPieza, type FormatoPieza, type VersionPieza } from "./esquemas";
 
-/** Mover desde el tablero sin permitir saltarse fecha prevista o publicación. */
-export function SelectorEstadoTablero({ piezaId, estado }: { piezaId: string; estado: EstadoPieza }) {
+/** Mover desde el tablero. Lo publicado solo se deshace desde la ficha, con confirmación. */
+export function SelectorEstadoTablero({ piezaId, estado, formato }: { piezaId: string; estado: EstadoPieza; formato: FormatoPieza }) {
   async function mover(formData: FormData) {
-    const destino = (formData.get("estado") ?? "").toString();
-    if (destino === "borrador" || destino === "en_preparacion" || destino === "listo") {
-      await moverPiezaEnTablero(piezaId, destino);
-    }
+    const destino = esquemaEstadoPieza.safeParse(formData.get("estado"));
+    if (!destino.success || destino.data === estado) return;
+    if (destino.data === "publicado" && !window.confirm("¿Marcar como publicada hoy? Se guardará una copia exacta del texto.")) return;
+    await moverPiezaEnTablero(piezaId, destino.data);
   }
+  if (estado === "publicado") return <p className="mt-2 text-xs text-tinta-suave">Para deshacer la publicación, abre la ficha.</p>;
 
   return <form action={mover} className="mt-2">
     <label className="sr-only" htmlFor={`estado-${piezaId}`}>Mover a estado</label>
     <select id={`estado-${piezaId}`} name="estado" defaultValue={estado} onChange={(e) => e.currentTarget.form?.requestSubmit()} className="w-full rounded-lg border border-borde bg-fondo px-2 py-1 text-xs">
-      {(["borrador", "en_preparacion", "listo"] as const).map((e) => <option key={e} value={e}>{ETIQUETA_ESTADO[e]}</option>)}
-      {estado === "planificado" && <option value="planificado">Planificado · usa la ficha</option>}
-      {estado === "publicado" && <option value="publicado">Publicado · usa la ficha</option>}
+      {estadosDeFormato(formato).map((e) => <option key={e} value={e}>{ETIQUETA_ESTADO[e]}</option>)}
     </select>
   </form>;
 }
@@ -55,7 +54,7 @@ export function BotonDeshacerPublicacion({ piezaId }: { piezaId: string }) {
     if (!window.confirm("¿Deshacer la publicación? La pieza volverá a estar editable y se conservará la fecha real.")) return;
     setPendiente(true);
     try {
-      await cambiarEstadoPieza(piezaId, "listo");
+      await cambiarEstadoPieza(piezaId, "editado");
     } finally {
       setPendiente(false);
     }

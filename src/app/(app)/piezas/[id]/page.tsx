@@ -1,7 +1,7 @@
-﻿import Link from "next/link";
+﻿﻿import Link from "next/link";
 import { notFound } from "next/navigation";
 import { z } from "zod";
-import { borrarVersion, crearDerivada, elegirVersion, enviarPiezaAPapelera, marcarEstadoPieza, marcarGrabada } from "@/features/piezas/acciones";
+import { borrarVersion, crearDerivada, elegirVersion, enviarPiezaAPapelera, marcarEstadoPieza } from "@/features/piezas/acciones";
 import { EtiquetasPieza } from "@/features/piezas/etiquetas-piezas";
 import { BotonDeshacerPublicacion, ComparadorVersiones } from "@/features/piezas/controles-clientes";
 import { EditorStories, type StoryTarjeta } from "@/features/stories/editor-stories";
@@ -10,7 +10,7 @@ import type { Asunto } from "@/features/email/esquemas";
 import { FormularioNuevaVersion, FormularioPieza, FormularioPlanificar, FormularioPublicar, FormularioVersion } from "@/features/piezas/formularios";
 import { HistorialDeFechas } from "@/features/mejoras/historial";
 import { BotonConcentracion, EnlaceConCampana, MarcaPerenne, PasosPieza } from "@/features/mejoras/pieza-extras";
-import { faltaCta, type Pieza, type VersionPieza } from "@/features/piezas/esquemas";
+import { ETIQUETA_ESTADO, estadosDeFormato, faltaCta, type Pieza, type VersionPieza } from "@/features/piezas/esquemas";
 import type { Pilar } from "@/features/ajustes/esquemas";
 import type { Oferta } from "@/features/ofertas/esquemas";
 import { BotonCopiar } from "@/shared/components/boton-copiar";
@@ -84,7 +84,7 @@ export default async function FichaPieza({ params }: { params: Promise<{ id: str
     <header className="mt-3 flex flex-col gap-3 border-b border-borde pb-6">
       <div className="flex flex-wrap items-start justify-between gap-3"><div><h1 className="font-serif text-2xl md:text-[28px]">{pieza.titulo}</h1><div className="mt-2"><EtiquetasPieza formato={pieza.formato} estado={pieza.estado} finalidad={pieza.finalidad} /></div></div>
         <div className="flex flex-wrap gap-2">
-          {!pieza.publicado_snapshot && (["borrador", "en_preparacion", "listo"] as const).filter((e) => e !== pieza.estado).map((e) => <form key={e} action={marcarEstadoPieza.bind(null, pieza.id, e)}><button className={botonDiscreto}>Marcar {e === "en_preparacion" ? "en preparación" : e}</button></form>)}
+          {!pieza.publicado_snapshot && estadosDeFormato(pieza.formato).filter((e) => e !== pieza.estado && e !== "publicado").map((e) => <form key={e} action={marcarEstadoPieza.bind(null, pieza.id, e)}><button className={botonDiscreto}>Pasar a {ETIQUETA_ESTADO[e]}</button></form>)}
           <form action={crearDerivada.bind(null, pieza.id, "adaptacion")}><button className={botonDiscreto}>Crear adaptación</button></form>
           <BotonCopiar texto={promptAdaptar(datosPieza, "email")} etiqueta="Copiar prompt para adaptar" />
           {pieza.publicado_snapshot && <form action={crearDerivada.bind(null, pieza.id, "reutilizacion")}><button className={botonDiscreto}>Reutilizar</button></form>}
@@ -114,7 +114,7 @@ export default async function FichaPieza({ params }: { params: Promise<{ id: str
           )}
         </p>
       )}
-      {faltaCta(pieza) && ["listo", "planificado", "publicado"].includes(pieza.estado) && <p className="rounded-tarjeta bg-aviso-fondo px-4 py-3 text-sm text-aviso">Falta la llamada a la acción: elige la oferta, qué pides y cómo hacerlo.</p>}
+      {faltaCta(pieza) && ["editado", "publicado"].includes(pieza.estado) && <p className="rounded-tarjeta bg-aviso-fondo px-4 py-3 text-sm text-aviso">Falta la llamada a la acción: elige la oferta, qué pides y cómo hacerlo.</p>}
     </header>
     <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px]">
       <main className="flex flex-col gap-8">
@@ -142,7 +142,6 @@ export default async function FichaPieza({ params }: { params: Promise<{ id: str
       </main>      <aside className="flex flex-col gap-6">
         <section><h2 className="mb-3 text-xl font-semibold">Clasificación y planificación</h2><FormularioPieza pieza={pieza} pilares={pilares} ofertas={ofertas} lanzamientos={lanzamientos} fases={fases} /></section>
         {!pieza.publicado_snapshot && <>{!(esEmail && enMarcha) && <FormularioPlanificar piezaId={pieza.id} fecha={pieza.fecha_prevista} />}<FormularioPublicar piezaId={pieza.id} fecha={pieza.fecha_real} tipo={esEmail ? "email" : "pieza"} /></>}
-        {!esEmail && <form action={marcarGrabada.bind(null, pieza.id, !pieza.grabado)}><button className={botonDiscreto}>{pieza.grabado ? "Marcar como no grabada" : "Ya grabado"}</button><p className="mt-1 text-xs text-tinta-suave">No cambia el estado de la pieza.</p></form>}
         <MarcaPerenne piezaId={pieza.id} perenne={pieza.perenne} />
         <EnlaceConCampana nombre="el enlace de la llamada a la acción" valor={pieza.cta_url ?? ""} />
         <section className="flex flex-col gap-2">

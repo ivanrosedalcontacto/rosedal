@@ -30,7 +30,7 @@ export async function Secuencias() {
   const ofertaPorId = new Map(ofertas.map((o) => [o.id, o]));
   const datos = secuencias.map((secuencia) => {
     const suyos = pasos.filter((p) => p.secuencia_id === secuencia.id);
-    const porEscribir = suyos.filter((p) => ["borrador", "en_preparacion"].includes(estadoDePaso(p) ?? "")).length;
+    const porEscribir = suyos.filter((p) => ["borrador"].includes(estadoDePaso(p) ?? "")).length;
     return { secuencia, total: suyos.length, porEscribir };
   });
 
