@@ -37,9 +37,8 @@ test("R2: planificar un reel de prueba y registrar su publicación", async ({ pa
   await expect(page.getByRole("heading", { level: 1, name: /Reel de prueba/ })).toBeVisible();
   await expect(page.getByText("Reel de prueba").first()).toBeVisible();
   await expect(page.getByText("Attract · Atraer").first()).toBeVisible();
-  await expect(page.getByLabel("Duración estimada (segundos)")).toHaveValue("7");
+  // Duración y plano se guardan, pero la ficha ya no los muestra (PRP-002).
   await expect(page.getByLabel("Texto en pantalla")).toHaveValue(frase);
-  await expect(page.getByLabel("Plano")).toHaveValue("Plano de mis manos abriendo la agenda");
 
   // 4. Filtrar «Sin usar»: la frase sigue ahí con el reel previsto.
   await page.goto("/frases");

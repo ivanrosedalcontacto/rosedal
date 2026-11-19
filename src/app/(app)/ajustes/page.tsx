@@ -2,7 +2,7 @@ import { archivarPilar } from "@/features/ajustes/acciones";
 import { HEX_PILAR, type Pilar } from "@/features/ajustes/esquemas";
 import { FormularioEditarPilar, FormularioMarca, FormularioPilar } from "@/features/ajustes/formularios";
 import { DatosDeEjemplo } from "@/features/demo/ajustes-demo";
-import { PasosPorFormato, RitmoSemanal } from "@/features/mejoras/ajustes-calidad";
+import { RitmoSemanal } from "@/features/mejoras/ajustes-calidad";
 import { CopiaDeSeguridad } from "@/features/mejoras/copia-seguridad";
 import { FechasSenaladas } from "@/features/mejoras/fechas-senaladas";
 import { PapeleraAjustes } from "@/features/mejoras/papelera-ajustes";
@@ -23,7 +23,7 @@ export default async function Ajustes() {
     { data: senaladasR },
   ] = await Promise.all([
     supabase.from("pilares").select("id,nombre,descripcion,color,orden,archivado").order("orden"),
-    supabase.from("ajustes").select("nombre_marca,audiencia_general,tono_general,ritmo_semanal,pasos_por_formato").maybeSingle(),
+    supabase.from("ajustes").select("nombre_marca,audiencia_general,tono_general,ritmo_semanal").maybeSingle(),
     supabase.from("piezas").select("id", { count: "exact", head: true }).eq("es_demo", true),
     supabase.from("ideas").select("id", { count: "exact", head: true }).eq("es_demo", true),
     supabase.from("frases").select("id", { count: "exact", head: true }).eq("es_demo", true),
@@ -41,7 +41,6 @@ export default async function Ajustes() {
     hitos: hitosDemo.count ?? 0,
   };
   const ritmo = (ajustes?.ritmo_semanal as { reels: number; correos: number; posts: number } | null) ?? { reels: 0, correos: 0, posts: 0 };
-  const pasosPorFormato = (ajustes?.pasos_por_formato as Record<string, string[]> | null) ?? {};
   const senaladas = (senaladasR ?? []) as { id: string; titulo: string; fecha_inicio: string; fecha_fin: string | null; nota: string }[];
 
   return (
@@ -99,8 +98,6 @@ export default async function Ajustes() {
       <PlantillasAjustes />
 
       <RitmoSemanal ritmo={ritmo} />
-
-      <PasosPorFormato pasos={pasosPorFormato} />
 
       <FechasSenaladas fechas={senaladas} />
 

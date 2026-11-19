@@ -7,6 +7,9 @@ import { diasDeEstaSemana, entrar } from "./ayuda";
  * Nota: «Crear adaptación» copia la pieza con el mismo formato (no hay diálogo
  * para elegirlo); el test cambia después el formato y la finalidad del correo.
  */
+// Recorrido largo (9 pasos con recargas): en el servidor de desarrollo pasa del minuto.
+test.setTimeout(120_000);
+
 test("R3: dos guiones, una entrada; adaptar a un correo", async ({ page, isMobile }) => {
   test.skip(isMobile, "R3 es un recorrido de ordenador (docs/06).");
   const idea = "¿Cómo sé si me basta con el curso o necesito una asesoría individual?";
@@ -53,13 +56,16 @@ test("R3: dos guiones, una entrada; adaptar a un correo", async ({ page, isMobil
 
   // 7. El correo lleva formato email, finalidad Nurture y una fecha distinta.
   const adaptation = page.getByRole("heading", { level: 1, name: /adaptación/ });
+  // El canal ya no se elige: el formato email lo pone solo.
   await page.getByLabel("Formato").selectOption("email");
-  await page.getByLabel("Canal").selectOption("email");
   await page.getByLabel("Finalidad").selectOption({ label: "Nurture · Cultivar" });
-  await page.locator('input[name="fecha_prevista"]').first().fill(diasDeEstaSemana().jueves);
   await page.getByRole("button", { name: "Guardar cambios" }).click();
   await expect(page.getByText("Guardado ✓")).toBeVisible({ timeout: 30_000 });
   await expect(adaptation).toBeVisible();
+  // La fecha se pone en un solo sitio: «Planificar».
+  await page.locator('input[name="fecha_prevista"]').first().fill(diasDeEstaSemana().jueves);
+  await page.getByRole("button", { name: "Planificar" }).click();
+  await expect(page.locator('input[name="fecha_prevista"]').first()).toHaveValue(diasDeEstaSemana().jueves, { timeout: 30_000 });
 
   // 8. El reel conserva su finalidad, su fecha y su estado, y lista el correo.
   await page.goto("/biblioteca");

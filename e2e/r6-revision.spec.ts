@@ -7,6 +7,9 @@ import { diasDeEstaSemana, entrar } from "./ayuda";
  * El paso 2 del recorrido es arrastrar la pieza; aquí se usa «Cambiar fecha»,
  * que es la vía disponible en la app (el arrastre con el ratón no está hecho).
  */
+// Recorrido largo (9 pasos con recargas): en el servidor de desarrollo pasa del minuto.
+test.setTimeout(120_000);
+
 test("R6: reprogramar, publicar otro día y consultar resultados", async ({ page }) => {
   const { lunes, martes, miercoles, jueves } = diasDeEstaSemana();
   const titulo = `Pieza para reprogramar ${Date.now()}`;
@@ -78,8 +81,7 @@ test("R6: reprogramar, publicar otro día y consultar resultados", async ({ page
   // 9. La ficha conserva la fecha prevista, el historial, la real y el enlace.
   await page.goto("/biblioteca");
   await page.locator("a").filter({ hasText: titulo }).first().click();
-  await expect(page.getByLabel("Fecha prevista").first()).toHaveValue(miercoles);
-  await expect(page.getByText(/Publicado el/).first()).toBeVisible();
+  await expect(page.getByText(/Publicado el/).first()).toContainText(`prevista: ${miercoles}`);
   await expect(page.getByRole("link", { name: "Ver la publicación" })).toHaveAttribute("href", "https://ejemplo.com/publicada");
   await expect(page.getByText(/martes/).first()).toBeVisible();
 });

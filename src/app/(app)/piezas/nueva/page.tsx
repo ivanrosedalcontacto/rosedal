@@ -15,6 +15,7 @@ type Parametros = {
   lanzamiento?: string;
   fase?: string;
   fecha?: string;
+  pilar?: string;
 };
 
 const uuid = z.string().uuid();
@@ -65,6 +66,7 @@ export default async function NuevaPieza({ searchParams }: { searchParams: Promi
         lanzamientoId={sp.lanzamiento}
         faseId={sp.fase}
         fechaPrevista={sp.fecha && esFecha(sp.fecha) ? sp.fecha : undefined}
+        pilarId={sp.pilar && uuid.safeParse(sp.pilar).success ? sp.pilar : undefined}
         contexto={contexto}
       />
       {plantillas.length > 0 && (

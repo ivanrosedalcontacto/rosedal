@@ -183,7 +183,19 @@ e2e actualizadas (R1 sin buscador), `docs/01`, `02`, `03`, `06`, `continuar.md` 
 
 ## Aprendizajes
 
-*(se rellena durante la implementación)*
+### 2026-11-19: Fases 1 y 2 hechas y en producción (commit `1fb1b62`)
+- Migración aplicada: 78 piezas antes y después (40 borrador, 7 editado, 31 publicado). La cuenta real de la usuaria solo tenía 4 reels en borrador.
+- Orden necesario: la migración y el despliegue van juntos; con la base de datos nueva y el código viejo fallan los cambios de estado.
+
+### 2026-11-19: Tipos generados obsoletos al borrar rutas
+- **Error**: tras borrar `/grabacion`, `tsc` y `build` fallaban en `.next/dev/types/validator.ts` («Cannot find module …/grabacion/page.js»).
+- **Fix**: borrar `.next/dev/types` y `.next/types` (se regeneran).
+- **Aplicar en**: cualquier fase que elimine rutas.
+
+### 2026-11-19: R3 y R6 pasan del minuto
+- **Error**: en el servidor de desarrollo tardan 50-66 s y el límite por prueba era 60 s; fallaban por tiempo, no por la app.
+- **Fix**: `test.setTimeout(120_000)` en esas dos pruebas.
+- **Aplicar en**: recorridos e2e largos.
 
 ---
 

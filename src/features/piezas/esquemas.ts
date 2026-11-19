@@ -63,11 +63,17 @@ const uuidOpcional = z.string().transform((v) => (v === "" ? null : v)).pipe(z.s
 const textoOpcional = (max: number) => z.string().trim().max(max).transform((v) => (v === "" ? null : v));
 const fechaOpcional = z.string().transform((v) => (v === "" ? null : v)).pipe(z.string().date().nullable());
 
+/** El canal ya no se pregunta: lo dice el formato. */
+export function canalDeFormato(formato: FormatoPieza, canalActual?: CanalPieza): CanalPieza {
+  if (formato === "email") return "email";
+  return canalActual && canalActual !== "email" ? canalActual : "instagram";
+}
+
 export const esquemaNuevaPieza = z.object({
   titulo: z.string().trim().min(1, "Ponle un título a la pieza.").max(300),
   formato: z.enum(FORMATOS_PIEZA),
-  canal: z.enum(CANALES_PIEZA),
   finalidad: z.enum(FINALIDADES).nullable(),
+  pilar_id: uuidOpcional,
   idea_id: uuidOpcional,
   oferta_id: uuidOpcional,
   lanzamiento_id: uuidOpcional,
@@ -96,6 +102,15 @@ export const esquemaPieza = z.object({
   email_tematica: textoOpcional(200),
   email_audiencia: textoOpcional(500),
   fecha_prevista: fechaOpcional,
+});
+
+/**
+ * Lo que guarda la ficha. Canal, lanzamiento, fase, notas, plano, preparación, duración
+ * y fecha ya no se editan aquí: no se envían, así que lo que tuvieran se conserva.
+ */
+export const esquemaEdicionPieza = esquemaPieza.omit({
+  canal: true, lanzamiento_id: true, fase_id: true, notas: true, plano: true,
+  preparacion: true, duracion_seg: true, fecha_prevista: true,
 });
 
 export const esquemaVersion = z.object({

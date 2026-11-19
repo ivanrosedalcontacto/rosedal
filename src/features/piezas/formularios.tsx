@@ -6,8 +6,8 @@ import { MensajeResultado, type Resultado } from "@/shared/components/mensaje-re
 import { botonPrincipal, campo } from "@/shared/components/estilos";
 import { crearPieza, crearVersion, guardarPieza, guardarVersion, planificarPieza, publicarPieza } from "./acciones";
 import {
-  CANALES_PIEZA, ETIQUETA_CANAL, ETIQUETA_FINALIDAD, ETIQUETA_FORMATO,
-  FINALIDADES, FORMATOS_PIEZA, type FormatoPieza, type Pieza, type VersionPieza,
+  ETIQUETA_FINALIDAD, ETIQUETA_FORMATO, FINALIDADES, FORMATOS_PIEZA,
+  type FormatoPieza, type Pieza, type VersionPieza,
 } from "./esquemas";
 
 const inicial: Resultado = { error: null };
@@ -21,6 +21,7 @@ export function FormularioNuevaPieza({
   lanzamientoId,
   faseId,
   fechaPrevista,
+  pilarId,
   contexto,
 }: {
   ideaId?: string;
@@ -30,6 +31,7 @@ export function FormularioNuevaPieza({
   lanzamientoId?: string;
   faseId?: string;
   fechaPrevista?: string;
+  pilarId?: string;
   contexto?: string;
 }) {
   const [r, accion, pendiente] = useActionState(crearPieza, inicial);
@@ -40,78 +42,42 @@ export function FormularioNuevaPieza({
       <input type="hidden" name="lanzamiento_id" value={lanzamientoId ?? ""} />
       <input type="hidden" name="fase_id" value={faseId ?? ""} />
       <input type="hidden" name="fecha_prevista" value={fechaPrevista ?? ""} />
+      <input type="hidden" name="pilar_id" value={pilarId ?? ""} />
       {contexto && <p className="rounded-boton bg-verde-50 px-3 py-2 text-sm text-tinta-suave">{contexto}</p>}
       <label className="text-sm font-medium">Título<input name="titulo" defaultValue={titulo} required className={campo} /></label>
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="text-sm font-medium">Formato
           <select name="formato" defaultValue={formatoInicial ?? "reel"} className={campo}>{FORMATOS_PIEZA.map((x) => <option key={x} value={x}>{ETIQUETA_FORMATO[x]}</option>)}</select>
         </label>
-        <label className="text-sm font-medium">Canal
-          <select name="canal" defaultValue={formatoInicial === "email" ? "email" : "instagram"} className={campo}>{CANALES_PIEZA.map((x) => <option key={x} value={x}>{ETIQUETA_CANAL[x]}</option>)}</select>
+        <label className="text-sm font-medium">Finalidad
+          <select name="finalidad" defaultValue="" className={campo}><option value="">Sin definir</option>{FINALIDADES.map((x) => <option key={x} value={x}>{ETIQUETA_FINALIDAD[x]}</option>)}</select>
         </label>
       </div>
-      <label className="text-sm font-medium">Finalidad
-        <select name="finalidad" defaultValue="" className={campo}><option value="">Sin definir</option>{FINALIDADES.map((x) => <option key={x} value={x}>{ETIQUETA_FINALIDAD[x]}</option>)}</select>
-      </label>
       <MensajeResultado r={r} />
       <button type="submit" disabled={pendiente} className={botonPrincipal}>{pendiente ? "Creando…" : "Crear pieza"}</button>
     </form>
   );
 }
 
-export function FormularioPieza({
-  pieza,
-  pilares,
-  ofertas,
-  lanzamientos,
-  fases,
-}: {
-  pieza: Pieza;
-  pilares: Opcion[];
-  ofertas: Opcion[];
-  lanzamientos: { id: string; nombre: string }[];
-  fases: { id: string; lanzamiento_id: string; nombre: string; tipo: string }[];
-}) {
+export function FormularioPieza({ pieza, pilares, ofertas }: { pieza: Pieza; pilares: Opcion[]; ofertas: Opcion[] }) {
   const [r, accion, pendiente] = useActionState(guardarPieza.bind(null, pieza.id), inicial);
   const bloqueada = Boolean(pieza.publicado_snapshot);
-  const [lanzamiento, setLanzamiento] = useState(pieza.lanzamiento_id ?? "");
   const [textoPublicacion, setTextoPublicacion] = useState(pieza.texto_publicacion);
-  const fasesDelLanzamiento = fases.filter((f) => f.lanzamiento_id === lanzamiento);
   return (
     <form action={accion} className="flex flex-col gap-5">
       <fieldset disabled={bloqueada} className="flex flex-col gap-5 disabled:opacity-70">
         <label className="text-sm font-medium">Título<input name="titulo" defaultValue={pieza.titulo} required className={campo} /></label>
         <div className="grid gap-3 sm:grid-cols-2">
           <label className="text-sm font-medium">Formato<select name="formato" defaultValue={pieza.formato} className={campo}>{FORMATOS_PIEZA.map((x) => <option key={x} value={x}>{ETIQUETA_FORMATO[x]}</option>)}</select></label>
-          <label className="text-sm font-medium">Canal<select name="canal" defaultValue={pieza.canal} className={campo}>{CANALES_PIEZA.map((x) => <option key={x} value={x}>{ETIQUETA_CANAL[x]}</option>)}</select></label>
           <label className="text-sm font-medium">Pilar<select name="pilar_id" defaultValue={pieza.pilar_id ?? ""} className={campo}><option value="">Sin pilar</option>{pilares.map((x) => <option key={x.id} value={x.id}>{x.nombre}</option>)}</select></label>
           <label className="text-sm font-medium">Finalidad<select name="finalidad" defaultValue={pieza.finalidad ?? ""} className={campo}><option value="">Sin definir</option>{FINALIDADES.map((x) => <option key={x} value={x}>{ETIQUETA_FINALIDAD[x]}</option>)}</select></label>
         </div>
-        <section className="grid gap-3 sm:grid-cols-2">
-          <h2 className="text-sm font-semibold sm:col-span-2">Lanzamiento</h2>
-          <label className="text-sm font-medium">
-            ¿En qué lanzamiento?
-            <select name="lanzamiento_id" value={lanzamiento} onChange={(e) => setLanzamiento(e.target.value)} className={campo}>
-              <option value="">Sin lanzamiento</option>
-              {lanzamientos.map((x) => <option key={x.id} value={x.id}>{x.nombre}</option>)}
-            </select>
-          </label>
-          <label className="text-sm font-medium">
-            ¿En qué fase?
-            <select key={lanzamiento} name="fase_id" defaultValue={pieza.fase_id ?? ""} disabled={!lanzamiento} className={campo}>
-              <option value="">Sin fase</option>
-              {fasesDelLanzamiento.map((x) => <option key={x.id} value={x.id}>{x.nombre}</option>)}
-            </select>
-          </label>
-        </section>
         {pieza.finalidad === "convert" && <BloqueConvert pieza={pieza} ofertas={ofertas} />}
         {pieza.formato === "email" ? (
           <section className="flex flex-col gap-3">
             <h2 className="text-lg font-semibold">Clasificación del correo</h2>
             <label className="text-sm font-medium">Temática<input name="email_tematica" defaultValue={pieza.email_tematica ?? ""} placeholder="Rutinas, lanzamiento, poscompra…" className={campo} /></label>
             <label className="text-sm font-medium">Audiencia<input name="email_audiencia" defaultValue={pieza.email_audiencia ?? ""} placeholder="Quien acaba de comprar el curso" className={campo} /></label>
-            <label className="text-sm font-medium">Fecha prevista<input name="fecha_prevista" type="date" defaultValue={pieza.fecha_prevista ?? ""} className={campo} /></label>
-            <label className="text-sm font-medium">Notas<textarea name="notas" defaultValue={pieza.notas} rows={3} className={campo} /></label>
           </section>
         ) : (
           <>
@@ -121,13 +87,6 @@ export function FormularioPieza({
               <ContadorDeTexto texto={textoPublicacion} maximo={2200} />
               <label className="text-sm font-medium">Texto en pantalla<textarea name="texto_en_pantalla" defaultValue={pieza.texto_en_pantalla} rows={3} className={campo} /></label>
             </section>
-            <section className="grid gap-3 sm:grid-cols-2">
-              <label className="text-sm font-medium">Fecha prevista<input name="fecha_prevista" type="date" defaultValue={pieza.fecha_prevista ?? ""} className={campo} /></label>
-              <label className="text-sm font-medium">Duración estimada (segundos)<input name="duracion_seg" type="number" min={0} defaultValue={pieza.duracion_seg ?? ""} className={campo} /></label>
-              <label className="text-sm font-medium">Plano<textarea name="plano" defaultValue={pieza.plano ?? ""} rows={2} className={campo} /></label>
-              <label className="text-sm font-medium">Qué preparar<textarea name="preparacion" defaultValue={pieza.preparacion ?? ""} rows={2} className={campo} /></label>
-            </section>
-            <label className="text-sm font-medium">Notas<textarea name="notas" defaultValue={pieza.notas} rows={3} className={campo} /></label>
           </>
         )}
       </fieldset>

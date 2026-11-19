@@ -9,7 +9,7 @@ import { EditorEmail } from "@/features/email/editor-email";
 import type { Asunto } from "@/features/email/esquemas";
 import { FormularioNuevaVersion, FormularioPieza, FormularioPlanificar, FormularioPublicar, FormularioVersion } from "@/features/piezas/formularios";
 import { HistorialDeFechas } from "@/features/mejoras/historial";
-import { BotonConcentracion, EnlaceConCampana, MarcaPerenne, PasosPieza } from "@/features/mejoras/pieza-extras";
+import { BotonConcentracion, MarcaPerenne } from "@/features/mejoras/pieza-extras";
 import { ETIQUETA_ESTADO, estadosDeFormato, faltaCta, type Pieza, type VersionPieza } from "@/features/piezas/esquemas";
 import type { Pilar } from "@/features/ajustes/esquemas";
 import type { Oferta } from "@/features/ofertas/esquemas";
@@ -29,7 +29,7 @@ export default async function FichaPieza({ params }: { params: Promise<{ id: str
   const { data: piezaR } = await supabase.from("piezas").select("*").eq("id", id).is("eliminado_en", null).maybeSingle();
   if (!piezaR) notFound();
   const pieza = piezaR as Pieza;
-  const [{ data: versionesR }, { data: pilaresR }, { data: ofertasR }, { data: lanzamientosR }, { data: fasesR }, { data: ideaR }, { data: origenR }, { data: derivadasR }, { data: tarjetasR }, { data: asuntosR }, { data: marcaR }, { data: pasoR }, { data: pasosR }, { data: cambiosR }, { data: ajustesR }, { data: recursosR }] = await Promise.all([
+  const [{ data: versionesR }, { data: pilaresR }, { data: ofertasR }, { data: lanzamientosR }, { data: fasesR }, { data: ideaR }, { data: origenR }, { data: derivadasR }, { data: tarjetasR }, { data: asuntosR }, { data: marcaR }, { data: pasoR }, { data: cambiosR }, { data: recursosR }] = await Promise.all([
     supabase.from("pieza_versiones").select("*").eq("pieza_id", id).eq("tipo", "guion").order("orden"),
     supabase.from("pilares").select("id,nombre,color,archivado").order("orden"),
     supabase.from("ofertas").select("id,nombre,archivada").order("nombre"),
@@ -42,9 +42,7 @@ export default async function FichaPieza({ params }: { params: Promise<{ id: str
     pieza.formato === "email" ? supabase.from("pieza_versiones").select("id,asunto,elegida,orden").eq("pieza_id", id).eq("tipo", "asunto").order("orden") : Promise.resolve({ data: [] }),
     pieza.formato === "email" ? supabase.from("ajustes").select("nombre_marca").maybeSingle() : Promise.resolve({ data: null }),
     pieza.formato === "email" ? supabase.from("secuencia_pasos").select("secuencia_id,secuencias_email(programacion,nombre)").eq("pieza_id", id).maybeSingle() : Promise.resolve({ data: null }),
-    supabase.from("pieza_pasos").select("id,texto,hecho,orden").eq("pieza_id", id).order("orden"),
     supabase.from("pieza_cambios_fecha").select("id,fecha_anterior,fecha_nueva,cambiado_en").eq("pieza_id", id).order("cambiado_en", { ascending: false }),
-    supabase.from("ajustes").select("pasos_por_formato").maybeSingle(),
     supabase.from("recursos_marca").select("id,tipo,texto,titulo").in("tipo", ["gancho", "hashtags"]).is("eliminado_en", null),
   ]);
   const versiones = (versionesR ?? []) as VersionPieza[];
@@ -59,9 +57,7 @@ export default async function FichaPieza({ params }: { params: Promise<{ id: str
   const tarjetas = (tarjetasR ?? []) as StoryTarjeta[];
   const asuntos = (asuntosR ?? []) as Asunto[];
   const marca = (marcaR as { nombre_marca: string } | null)?.nombre_marca ?? "Rosedal";
-  const pasos = (pasosR ?? []) as { id: string; texto: string; hecho: boolean; orden: number }[];
   const cambios = (cambiosR ?? []) as { id: string; fecha_anterior: string | null; fecha_nueva: string | null; cambiado_en: string }[];
-  const pasosPorFormato = (ajustesR?.pasos_por_formato as Record<string, string[]> | null) ?? {};
   type PasoConSecuencia = { secuencia_id: string; secuencias_email: { programacion: string; nombre: string } | { programacion: string; nombre: string }[] | null };
   const paso = pasoR as PasoConSecuencia | null;
   const relacionSecuencia = paso && (Array.isArray(paso.secuencias_email) ? paso.secuencias_email[0] : paso.secuencias_email);
@@ -103,7 +99,7 @@ export default async function FichaPieza({ params }: { params: Promise<{ id: str
       {paso && relacionSecuencia && <p className="text-sm text-tinta-suave">Paso de la secuencia: <Link href={`/email/secuencias/${paso.secuencia_id}`} className="text-verde-700">{relacionSecuencia.nombre}</Link>{enMarcha ? " · se muestra como «En marcha»" : ""}</p>}
       {pieza.publicado_snapshot && (
         <p className="rounded-tarjeta bg-verde-50 px-4 py-3 text-sm text-verde-700">
-          {esEmail ? (enMarcha ? "En marcha · copia del correo conservada." : `Enviado el ${pieza.fecha_real ?? "sin fecha"} · asunto, vista previa y cuerpo conservados.`) : `Publicado el ${pieza.fecha_real ?? "sin fecha"} · el contenido está congelado.`}
+          {esEmail ? (enMarcha ? "En marcha · copia del correo conservada." : `Enviado el ${pieza.fecha_real ?? "sin fecha"} · asunto, vista previa y cuerpo conservados.`) : `Publicado el ${pieza.fecha_real ?? "sin fecha"}${pieza.fecha_prevista ? ` (prevista: ${pieza.fecha_prevista})` : ""} · el contenido está congelado.`}
           {pieza.url_publicada && (
             <>
               {" · "}
@@ -126,7 +122,6 @@ export default async function FichaPieza({ params }: { params: Promise<{ id: str
           <FormularioNuevaVersion piezaId={pieza.id} />
         </section>}
         {derivadas.length > 0 && <section><h2 className="text-xl font-semibold">Derivadas de esta pieza</h2><ul className="mt-3">{derivadas.map((d) => <li key={d.id}><Link href={`/piezas/${d.id}`} className="text-verde-700">{d.formato} · {d.titulo}</Link></li>)}</ul></section>}
-        <PasosPieza piezaId={pieza.id} pasos={pasos} pasosPorFormato={pasosPorFormato[pieza.formato] ?? []} />
         {recursosR && recursosR.length > 0 && (
           <section className="flex flex-col gap-2">
             <h2 className="text-xl font-semibold">Ganchos y hashtags</h2>
@@ -140,10 +135,9 @@ export default async function FichaPieza({ params }: { params: Promise<{ id: str
           </section>
         )}
       </main>      <aside className="flex flex-col gap-6">
-        <section><h2 className="mb-3 text-xl font-semibold">Clasificación y planificación</h2><FormularioPieza pieza={pieza} pilares={pilares} ofertas={ofertas} lanzamientos={lanzamientos} fases={fases} /></section>
+        <section><h2 className="mb-3 text-xl font-semibold">Clasificación</h2><FormularioPieza pieza={pieza} pilares={pilares} ofertas={ofertas} /></section>
         {!pieza.publicado_snapshot && <>{!(esEmail && enMarcha) && <FormularioPlanificar piezaId={pieza.id} fecha={pieza.fecha_prevista} />}<FormularioPublicar piezaId={pieza.id} fecha={pieza.fecha_real} tipo={esEmail ? "email" : "pieza"} /></>}
         <MarcaPerenne piezaId={pieza.id} perenne={pieza.perenne} />
-        <EnlaceConCampana nombre="el enlace de la llamada a la acción" valor={pieza.cta_url ?? ""} />
         <section className="flex flex-col gap-2">
           <h2 className="text-xl font-semibold">Historial de fechas</h2>
           <HistorialDeFechas cambios={cambios} />

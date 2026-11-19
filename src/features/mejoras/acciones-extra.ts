@@ -143,81 +143,6 @@ export async function guardarRitmo(_p: Resultado, d: FormData): Promise<Resultad
   return { error: null, ok: true };
 }
 
-/** Pasos de partida por formato (B3). */
-export async function guardarPasosPorFormato(_p: Resultado, d: FormData): Promise<Resultado> {
-  const supabase = await crearClienteServidor();
-  const porFormato: Record<string, string[]> = {};
-  for (const formato of ["reel", "reel_prueba", "carrusel", "post", "stories", "email"]) {
-    const lista = texto(d, `pasos_${formato}`)
-      .split("\n")
-      .map((l) => l.trim())
-      .filter((l) => l.length > 0)
-      .slice(0, 20);
-    porFormato[formato] = lista;
-  }
-  const { data: ajustes } = await supabase.from("ajustes").select("id").maybeSingle();
-  if (ajustes) {
-    await supabase.from("ajustes").update({ pasos_por_formato: porFormato }).eq("id", ajustes.id);
-  } else {
-    await supabase.from("ajustes").insert({ pasos_por_formato: porFormato });
-  }
-  refrescar();
-  return { error: null, ok: true };
-}
-
-/** Pasos de una pieza: añadir, marcar y quitar. */
-export async function crearPaso(piezaId: string, _p: Resultado, d: FormData): Promise<Resultado> {
-  const pieza = uuid.safeParse(piezaId);
-  const textoPaso = z.string().trim().min(1, "Escribe el paso.").max(200).safeParse(texto(d, "texto"));
-  if (!pieza.success) return { error: "Pieza no válida." };
-  if (!textoPaso.success) return { error: textoPaso.error.issues[0]?.message ?? "Escribe el paso." };
-  const supabase = await crearClienteServidor();
-  const { count } = await supabase.from("pieza_pasos").select("id", { count: "exact", head: true }).eq("pieza_id", pieza.data);
-  const { error } = await supabase.from("pieza_pasos").insert({ pieza_id: pieza.data, texto: textoPaso.data, orden: count ?? 0 });
-  if (error) return { error: "No se pudo añadir el paso." };
-  refrescar();
-  return { error: null, ok: true };
-}
-
-export async function alternarPaso(piezaId: string, pasoId: string, hecho: boolean) {
-  const pieza = uuid.safeParse(piezaId);
-  const paso = uuid.safeParse(pasoId);
-  if (!pieza.success || !paso.success) return;
-  const supabase = await crearClienteServidor();
-  await supabase.from("pieza_pasos").update({ hecho }).eq("id", paso.data).eq("pieza_id", pieza.data);
-  refrescar();
-}
-
-export async function borrarPaso(piezaId: string, pasoId: string) {
-  const pieza = uuid.safeParse(piezaId);
-  const paso = uuid.safeParse(pasoId);
-  if (!pieza.success || !paso.success) return;
-  const supabase = await crearClienteServidor();
-  await supabase.from("pieza_pasos").delete().eq("id", paso.data).eq("pieza_id", pieza.data);
-  refrescar();
-}
-
-/** Añade a la pieza los pasos de partida de su formato. */
-export async function aplicarPasosPorDefecto(piezaId: string) {
-  const pieza = uuid.safeParse(piezaId);
-  if (!pieza.success) return;
-  const supabase = await crearClienteServidor();
-  const { data: fila } = await supabase.from("piezas").select("formato").eq("id", pieza.data).maybeSingle();
-  if (!fila) return;
-  const { data: ajustes } = await supabase.from("ajustes").select("pasos_por_formato").maybeSingle();
-  const pasos = (ajustes?.pasos_por_formato as Record<string, string[]> | null)?.[fila.formato as string] ?? [];
-  if (pasos.length === 0) return;
-  const { count } = await supabase.from("pieza_pasos").select("id", { count: "exact", head: true }).eq("pieza_id", pieza.data);
-  const { data: existentes } = await supabase.from("pieza_pasos").select("texto").eq("pieza_id", pieza.data);
-  const yaEsta = new Set(((existentes ?? []) as { texto: string }[]).map((p) => p.texto));
-  const nuevos = pasos.filter((p) => !yaEsta.has(p));
-  if (nuevos.length === 0) return;
-  await supabase.from("pieza_pasos").insert(
-    nuevos.map((p, i) => ({ pieza_id: pieza.data, texto: p, hecho: false, orden: (count ?? 0) + i })),
-  );
-  refrescar();
-}
-
 /** Marca una pieza como perenne (B5). */
 export async function alternarPerenne(piezaId: string, perenne: boolean) {
   const pieza = uuid.safeParse(piezaId);
@@ -237,5 +162,3 @@ export async function anotarCambioDeFecha(
   if (anterior === nueva) return;
   await supabase.from("pieza_cambios_fecha").insert({ pieza_id: piezaId, fecha_anterior: anterior, fecha_nueva: nueva });
 }
-
-/** Enlace con etiquetas de campaña (B9): vive en `enlace.ts` para poder usarse en el cliente. */

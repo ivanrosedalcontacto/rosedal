@@ -7,7 +7,7 @@ import type { Resultado } from "@/shared/components/mensaje-resultado";
 import { crearClienteServidor } from "@/shared/lib/supabase/servidor";
 import { anotarCambioDeFecha } from "@/features/mejoras/acciones-extra";
 import { proponerMetricas } from "@/features/revision/metricas";
-import { esquemaEstadoPieza, esquemaNuevaPieza, esquemaPieza, esquemaVersion, type EstadoPieza } from "./esquemas";
+import { canalDeFormato, esquemaEdicionPieza, esquemaEstadoPieza, esquemaNuevaPieza, esquemaVersion, type CanalPieza, type EstadoPieza } from "./esquemas";
 
 const uuid = z.string().uuid();
 const texto = (d: FormData, k: string) => (d.get(k) ?? "").toString();
@@ -22,8 +22,8 @@ function datosNuevaPieza(d: FormData) {
   return esquemaNuevaPieza.safeParse({
     titulo: texto(d, "titulo"),
     formato: texto(d, "formato") || "reel",
-    canal: texto(d, "canal") || "instagram",
     finalidad: texto(d, "finalidad") || null,
+    pilar_id: texto(d, "pilar_id"),
     idea_id: texto(d, "idea_id"),
     oferta_id: texto(d, "oferta_id"),
     lanzamiento_id: texto(d, "lanzamiento_id"),
@@ -45,7 +45,7 @@ export async function crearPieza(_p: Resultado, d: FormData): Promise<Resultado>
   const r = datosNuevaPieza(d);
   if (!r.success) return { error: r.error.issues[0]?.message ?? "Revisa los datos." };
   const supabase = await crearClienteServidor();
-  const { data, error } = await supabase.from("piezas").insert(r.data).select("id").single();
+  const { data, error } = await supabase.from("piezas").insert({ ...r.data, canal: canalDeFormato(r.data.formato) }).select("id").single();
   if (error || !data) return { error: "No se pudo crear la pieza. Inténtalo de nuevo." };
   const { error: errorVersion } = await supabase
     .from("pieza_versiones")
@@ -58,36 +58,21 @@ export async function crearPieza(_p: Resultado, d: FormData): Promise<Resultado>
 
 export async function guardarPieza(id: string, _p: Resultado, d: FormData): Promise<Resultado> {
   const idValido = uuid.safeParse(id);
-  const r = esquemaPieza.safeParse({
-    titulo: texto(d, "titulo"), formato: texto(d, "formato"), canal: texto(d, "canal"),
+  const r = esquemaEdicionPieza.safeParse({
+    titulo: texto(d, "titulo"), formato: texto(d, "formato"),
     pilar_id: texto(d, "pilar_id"), finalidad: texto(d, "finalidad") || null, oferta_id: texto(d, "oferta_id"),
-    lanzamiento_id: texto(d, "lanzamiento_id"), fase_id: texto(d, "fase_id"),
     cta_accion: texto(d, "cta_accion"), cta_como: texto(d, "cta_como"), cta_url: texto(d, "cta_url"),
     texto_publicacion: texto(d, "texto_publicacion"), texto_en_pantalla: texto(d, "texto_en_pantalla"),
-    notas: texto(d, "notas"), plano: texto(d, "plano"), preparacion: texto(d, "preparacion"),
-    duracion_seg: texto(d, "duracion_seg"), fecha_prevista: texto(d, "fecha_prevista"),
     email_tematica: texto(d, "email_tematica"), email_audiencia: texto(d, "email_audiencia"),
   });
   if (!idValido.success) return { error: "Pieza no válida." };
   if (!r.success) return { error: r.error.issues[0]?.message ?? "Revisa los datos." };
   const supabase = await crearClienteServidor();
-  const valores = { ...r.data };
-  // La fase solo vale si pertenece al lanzamiento elegido.
-  if (!valores.lanzamiento_id) valores.fase_id = null;
-  else if (valores.fase_id) {
-    const { data: fase } = await supabase
-      .from("lanzamiento_fases")
-      .select("lanzamiento_id")
-      .eq("id", valores.fase_id)
-      .maybeSingle();
-    if (!fase || fase.lanzamiento_id !== valores.lanzamiento_id) valores.fase_id = null;
-  }
+  const { data: actual } = await supabase.from("piezas").select("canal").eq("id", idValido.data).maybeSingle();
+  if (!actual) return { error: "No encontramos la pieza." };
+  const valores = { ...r.data, canal: canalDeFormato(r.data.formato, actual.canal as CanalPieza) };
   const { error } = await supabase.from("piezas").update(valores).eq("id", idValido.data).is("publicado_snapshot", null);
   if (error) return { error: "No se pudo guardar. La pieza publicada no se puede editar." };
-  const { data: antes } = await supabase.from("piezas").select("fecha_prevista").eq("id", idValido.data).maybeSingle();
-  if (antes && antes.fecha_prevista !== valores.fecha_prevista) {
-    await anotarCambioDeFecha(supabase, idValido.data, antes.fecha_prevista, valores.fecha_prevista);
-  }
   refrescar(idValido.data);
   return { error: null, ok: true };
 }
