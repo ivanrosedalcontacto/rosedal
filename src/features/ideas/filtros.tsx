@@ -21,7 +21,7 @@ const ETIQUETA_ESTADO_FILTRO: Record<EstadoIdea, string> = {
   archivada: "Archivadas",
 };
 
-/** Barra de filtros de la bandeja: se aplican al instante y se reflejan en la URL. */
+/** Filtros de la bandeja (en su pestaña): se aplican al instante y se reflejan en la URL. */
 export function BarraFiltros({ actual, pilares, ofertas, lanzamientos }: { actual: FiltrosBandeja; pilares: Opcion[]; ofertas: Opcion[]; lanzamientos: Opcion[] }) {
   const router = useRouter();
 
@@ -42,7 +42,6 @@ export function BarraFiltros({ actual, pilares, ofertas, lanzamientos }: { actua
     const g = (k: string) => (d.get(k) ?? "").toString();
     const orden = g("orden");
     navegar({
-      q: g("q"),
       tipo: g("tipo"),
       estado: g("estado"),
       pilar: g("pilar"),
@@ -65,7 +64,6 @@ export function BarraFiltros({ actual, pilares, ofertas, lanzamientos }: { actua
   }
 
   const activos: { clave: keyof FiltrosBandeja; texto: string }[] = [];
-  if (actual.q) activos.push({ clave: "q", texto: `«${actual.q}»` });
   if (actual.tipo) activos.push({ clave: "tipo", texto: ETIQUETA_TIPO[actual.tipo as TipoIdea] });
   if (actual.estado) activos.push({ clave: "estado", texto: ETIQUETA_ESTADO_FILTRO[actual.estado as EstadoIdea] });
   if (actual.pilar) {
@@ -90,7 +88,7 @@ export function BarraFiltros({ actual, pilares, ofertas, lanzamientos }: { actua
   const hay = hayFiltrosActivos(actual);
   // Al cambiar un filtro el formulario se rehace con los valores nuevos; «orden» queda fuera
   // para que el panel no se cierre solo al ordenar.
-  const claveFormulario = [actual.q, actual.tipo, actual.estado, actual.pilar, actual.oferta, actual.lanzamiento, actual.relevancia, actual.minutos].join("|");
+  const claveFormulario = [actual.tipo, actual.estado, actual.pilar, actual.oferta, actual.lanzamiento, actual.relevancia, actual.minutos].join("|");
 
   return (
     <form key={claveFormulario} onSubmit={enviar} className="flex flex-col gap-3">
@@ -111,7 +109,7 @@ export function BarraFiltros({ actual, pilares, ofertas, lanzamientos }: { actua
           {hay && (
             <button
               type="button"
-              onClick={() => navegar({ q: "", tipo: "", estado: "", pilar: "", oferta: "", lanzamiento: "", relevancia: "", minutos: "" })}
+              onClick={() => navegar({ tipo: "", estado: "", pilar: "", oferta: "", lanzamiento: "", relevancia: "", minutos: "" })}
               className="min-h-9 px-2 text-sm text-verde-700"
             >
               Limpiar
@@ -130,15 +128,8 @@ export function BarraFiltros({ actual, pilares, ofertas, lanzamientos }: { actua
         </label>
       </div>
 
-      <details open={hay} className="rounded-tarjeta border border-borde bg-fondo-suave px-4 py-3">
-        <summary className="min-h-9 cursor-pointer text-sm font-medium">
-          Filtros{hay ? ` (${activos.length})` : ""}
-        </summary>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <label className="text-sm font-medium sm:col-span-2 lg:col-span-3">
-            Buscar en el texto, tema, problema o notas
-            <input name="q" type="search" defaultValue={actual.q} className={campo} />
-          </label>
+      <div className="rounded-tarjeta border border-borde bg-fondo-suave px-4 py-3">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <label className="text-sm font-medium">
             Tipo
             <select name="tipo" defaultValue={actual.tipo} onChange={cambiarSelect} className={campo}>
@@ -219,7 +210,7 @@ export function BarraFiltros({ actual, pilares, ofertas, lanzamientos }: { actua
             </button>
           </div>
         </div>
-      </details>
+      </div>
     </form>
   );
 }

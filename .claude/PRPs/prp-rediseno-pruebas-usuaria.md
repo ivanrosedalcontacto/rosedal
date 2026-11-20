@@ -212,6 +212,11 @@ e2e actualizadas (R1 sin buscador), `docs/01`, `02`, `03`, `06`, `continuar.md` 
 - **Fix**: `waitForLoadState("networkidle")` y reintento con `expect(...).toPass()` hasta ver el botón de confirmar.
 - **Aplicar en**: pruebas que pulsan botones con `onClick` nada más cargar la página.
 
+### 2026-11-20: Fase 6 hecha
+- `PestanasFiltros` (`src/shared/components/pestanas-filtros.tsx`) en Ideas, Frases, Email y Mapa: «Resultados (n)» por defecto y «Filtros (n)». El estado de la pestaña es de cliente; los filtros siguen en la dirección.
+- Fuera `q` en Ideas y Frases y el botón «Buscar en la app» (lateral y «Más»). Ctrl + K sigue, solo en ordenador: el buscador vive en la barra lateral, que en móvil está oculta.
+- e2e: en pruebas, un campo dentro de la pestaña oculta necesita pulsar antes `tab /Filtros/`. Prueba nueva `r10-filtros-pestana`.
+
 ### 2026-11-20: Fase 5 hecha
 - Programar es `?programar=<día>&pilar=<id>` en la dirección (panel renderizado en el servidor, sin JavaScript propio). Solo piezas Editadas sin día. Prueba nueva: `e2e/r9-calendario-pilares.spec.ts`.
 

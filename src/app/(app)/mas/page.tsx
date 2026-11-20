@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { cerrarSesion } from "@/app/(auth)/login/acciones";
-import { BuscadorGlobal } from "@/features/mejoras/buscador-global";
 import { GRUPOS_NAV } from "@/shared/constants/secciones";
 
 export default function Mas() {
@@ -8,7 +7,6 @@ export default function Mas() {
     <div className="mx-auto max-w-[1200px] px-4 py-8">
       <h1 className="font-serif text-2xl">Más</h1>
       <div className="mt-6 flex flex-col gap-6">
-        <BuscadorGlobal />
         {GRUPOS_NAV.map((g, i) => (
           <section key={g.titulo ?? i}>
             {g.titulo && <h2 className="mb-2 text-sm font-semibold text-tinta-suave">{g.titulo}</h2>}

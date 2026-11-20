@@ -1,3 +1,4 @@
+import { PestanasFiltros } from "@/shared/components/pestanas-filtros";
 import Link from "next/link";
 import type { Pilar } from "@/features/ajustes/esquemas";
 import { ETIQUETA_FINALIDAD, ETIQUETA_FORMATO, type FormatoPieza } from "@/features/piezas/esquemas";
@@ -141,7 +142,11 @@ export async function Mapa({ sp }: { sp: Parametros }) {
 
   return (
     <div className="flex flex-col gap-5">
-      <form method="get" className="grid gap-3 rounded-tarjeta border border-borde bg-fondo-suave p-4 sm:grid-cols-2 lg:grid-cols-4">
+      <PestanasFiltros
+        activos={(rango.clave !== "30" ? 1 : 0) + (estado !== "todas" ? 1 : 0) + (lanzamiento ? 1 : 0)}
+        total={dentroDelPeriodo.length}
+        limpiar="/mapa"
+        filtros={<form method="get" className="grid gap-3 rounded-tarjeta border border-borde bg-fondo-suave p-4 sm:grid-cols-2 lg:grid-cols-4">
         <label className="text-sm font-medium">
           Periodo
           <select name="periodo" defaultValue={rango.clave} className="mt-1 w-full rounded-boton border border-borde bg-fondo px-3 py-2">
@@ -172,9 +177,6 @@ export async function Mapa({ sp }: { sp: Parametros }) {
         </label>
         <div className="flex items-end gap-3">
           <button className="rounded-boton bg-verde-700 px-4 py-2 text-sm font-medium text-white">Aplicar</button>
-          <Link href="/mapa" className="py-2 text-sm text-verde-700">
-            Limpiar
-          </Link>
         </div>
         {rango.clave === "rango" && (
           <>
@@ -186,7 +188,8 @@ export async function Mapa({ sp }: { sp: Parametros }) {
             </label>
           </>
         )}
-      </form>
+      </form>}
+      >
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="overflow-x-auto rounded-tarjeta border border-borde">
@@ -270,6 +273,7 @@ export async function Mapa({ sp }: { sp: Parametros }) {
           </p>
         </aside>
       </div>
+      </PestanasFiltros>
     </div>
   );
 }

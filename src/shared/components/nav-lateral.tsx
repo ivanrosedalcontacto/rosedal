@@ -15,6 +15,7 @@ export function NavLateral() {
         Rosedal
       </Link>
       <MenuCaptura variante="lateral" />
+      {/* Sin botón: la búsqueda global queda solo con Ctrl + K. */}
       <BuscadorGlobal />
       <nav aria-label="Principal" className="flex flex-1 flex-col gap-4">
         {GRUPOS_NAV.map((g, i) => (

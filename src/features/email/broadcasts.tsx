@@ -3,6 +3,7 @@ import { ETIQUETA_FINALIDAD, ETIQUETA_ESTADO, FINALIDADES, type EstadoPieza, typ
 import type { Pilar } from "@/features/ajustes/esquemas";
 import type { Oferta } from "@/features/ofertas/esquemas";
 import { Etiqueta, EtiquetaPilar } from "@/shared/components/etiquetas";
+import { PestanasFiltros } from "@/shared/components/pestanas-filtros";
 import { crearClienteServidor } from "@/shared/lib/supabase/servidor";
 import { leerFiltrosEmail, sanearBusqueda, valor, type Parametros } from "./consultas";
 import { esFecha, formatearFecha, formatearFechaCorta, hoyMadrid, lunesDe, sumarDias } from "@/shared/lib/fechas";
@@ -93,7 +94,11 @@ export async function Broadcasts({ sp }: { sp: Parametros }) {
         </div>
       )}
 
-      <form method="get" className="grid gap-3 rounded-tarjeta border border-borde bg-fondo-suave p-4 sm:grid-cols-2 lg:grid-cols-5">
+      <PestanasFiltros
+        activos={Object.values(filtros).filter(Boolean).length}
+        total={correos.length}
+        limpiar={`/email?vista=broadcasts&pestana=${pestana}${pestana === "semana" ? `&semana=${lunes}` : ""}`}
+        filtros={<form method="get" className="grid gap-3 rounded-tarjeta border border-borde bg-fondo-suave p-4 sm:grid-cols-2 lg:grid-cols-5">
         <input type="hidden" name="vista" value="broadcasts" />
         <input type="hidden" name="pestana" value={pestana} />
         {pestana === "semana" && <input type="hidden" name="semana" value={lunes} />}
@@ -105,9 +110,9 @@ export async function Broadcasts({ sp }: { sp: Parametros }) {
         <label className="text-sm font-medium">Lanzamiento<select name="lanzamiento" defaultValue={filtros.lanzamiento} className="mt-1 w-full rounded-boton border border-borde bg-fondo px-3 py-2"><option value="">Todos</option>{lanzamientos.map((l) => <option key={l.id} value={l.id}>{l.nombre}</option>)}</select></label>
         <div className="flex items-end gap-2 sm:col-span-2 lg:col-span-5">
           <button className="rounded-boton bg-verde-700 px-4 py-2 text-sm font-medium text-white">Aplicar filtros</button>
-          <Link href={`/email?vista=broadcasts&pestana=${pestana}`} className="py-2 text-sm text-verde-700">Limpiar</Link>
         </div>
-      </form>
+      </form>}
+      >
 
       {correos.length === 0 ? (
         <p className="rounded-tarjeta bg-verde-50 p-6 text-center text-tinta-suave">
@@ -120,6 +125,7 @@ export async function Broadcasts({ sp }: { sp: Parametros }) {
           {correos.map((c) => <FilaCorreo key={c.id} correo={c} pilar={c.pilar_id ? pilarPorId.get(c.pilar_id) : undefined} oferta={c.oferta_id ? ofertaPorId.get(c.oferta_id) : undefined} lanzamiento={c.lanzamiento_id ? lanzamientoPorId.get(c.lanzamiento_id) : undefined} asunto={asuntoPorPieza.get(c.id) ?? null} />)}
         </ul>
       )}
+      </PestanasFiltros>
     </section>
   );
 }

@@ -30,12 +30,14 @@ test("R1: guardar una frase en el móvil y copiarla después", async ({ page, co
   await page.reload();
   await expect(page.getByRole("heading", { name: "Hoy", exact: true })).toBeVisible();
 
-  // 5. Ir a Frases y buscar una palabra de la frase.
+  // 5. Ir a Frases (sin buscador): pestaña «Filtros» → «Sin usar»; la frase aparece en «Resultados».
   await page.goto("/frases");
-  await page.getByRole("textbox", { name: "Buscar" }).fill("ritmo");
+  await page.getByRole("tab", { name: /Filtros/ }).click();
+  await page.getByLabel("Mostrar").selectOption("sin_usar");
   await page.getByRole("button", { name: "Aplicar" }).click();
+  await expect(page.getByRole("tab", { name: "Filtros (1)" })).toBeVisible();
 
-  const tarjeta = page.locator("article").filter({ hasText: "ritmo" }).first();
+  const tarjeta = page.locator("article").filter({ hasText: frase }).first();
   await expect(tarjeta).toBeVisible();
   await expect(tarjeta).toContainText(conBlanco);
   await expect(tarjeta).toContainText("Sin usar");

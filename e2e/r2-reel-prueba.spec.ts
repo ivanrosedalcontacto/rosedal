@@ -42,6 +42,7 @@ test("R2: planificar un reel de prueba y registrar su publicación", async ({ pa
 
   // 4. Filtrar «Sin usar»: la frase sigue ahí con el reel previsto.
   await page.goto("/frases");
+  await page.getByRole("tab", { name: /Filtros/ }).click();
   await page.getByLabel("Mostrar").selectOption("sin_usar");
   await page.getByRole("button", { name: "Aplicar" }).click();
   const sinUsar = page.locator("article").filter({ hasText: frase }).first();
@@ -49,6 +50,7 @@ test("R2: planificar un reel de prueba y registrar su publicación", async ({ pa
   await expect(sinUsar).toContainText("Reel de prueba previsto");
 
   // 5. Filtrar «Ya utilizadas»: la frase no aparece.
+  await page.getByRole("tab", { name: /Filtros/ }).click();
   await page.getByLabel("Mostrar").selectOption("usadas");
   await page.getByRole("button", { name: "Aplicar" }).click();
   await expect(page.locator("article").filter({ hasText: frase })).toHaveCount(0);
@@ -63,6 +65,7 @@ test("R2: planificar un reel de prueba y registrar su publicación", async ({ pa
 
   // 7. La frase ya figura como utilizada.
   await page.goto("/frases");
+  await page.getByRole("tab", { name: /Filtros/ }).click();
   await page.getByLabel("Mostrar").selectOption("usadas");
   await page.getByRole("button", { name: "Aplicar" }).click();
   const usada = page.locator("article").filter({ hasText: frase }).first();

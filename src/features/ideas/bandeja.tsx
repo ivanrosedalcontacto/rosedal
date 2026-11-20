@@ -7,13 +7,14 @@ import {
   CAMPOS_IDEAS,
   compararPrioridad,
   compararTiempo,
+  contarFiltros,
   hayFiltrosActivos,
   leerFiltros,
-  sanearBusqueda,
   type Parametros,
 } from "./consultas";
 import { EtiquetaEstadoIdea, EtiquetaTipoIdea } from "./etiquetas-ideas";
 import { BarraFiltros } from "./filtros";
+import { PestanasFiltros } from "@/shared/components/pestanas-filtros";
 import type { Idea } from "./esquemas";
 
 function fechaCapturada(iso: string): string {
@@ -38,13 +39,6 @@ export async function Bandeja({ sp }: { sp: Parametros }) {
   if (f.relevancia) consulta = consulta.gte("relevancia", Number(f.relevancia));
   if (f.minutos === "mas") consulta = consulta.gt("minutos_preparacion", 60);
   else if (f.minutos) consulta = consulta.lte("minutos_preparacion", Number(f.minutos));
-  const limpio = sanearBusqueda(f.q);
-  if (limpio) {
-    // La búsqueda pasa ya saneada: sin comillas, paréntesis ni comodines que rompan `.or(...)`.
-    consulta = consulta.or(
-      `texto.ilike.%${limpio}%,tema.ilike.%${limpio}%,problema_audiencia.ilike.%${limpio}%,notas.ilike.%${limpio}%`,
-    );
-  }
   if (f.orden === "recientes") consulta = consulta.order("created_at", { ascending: false });
 
   const [{ data: ideasR }, { data: pilaresR }, { data: ofertasR }, { data: lanzamientosR }] = await Promise.all([
@@ -69,8 +63,12 @@ export async function Bandeja({ sp }: { sp: Parametros }) {
 
   return (
     <section className="flex flex-col gap-4">
-      <BarraFiltros actual={f} pilares={opcionesPilares} ofertas={opcionesOfertas} lanzamientos={opcionesLanzamientos} />
-
+      <PestanasFiltros
+        activos={contarFiltros(f)}
+        total={ideas.length}
+        limpiar="/ideas?vista=bandeja"
+        filtros={<BarraFiltros actual={f} pilares={opcionesPilares} ofertas={opcionesOfertas} lanzamientos={opcionesLanzamientos} />}
+      >
       {ideas.length === 0 ? (
         <div className="flex flex-col items-center gap-3 rounded-tarjeta border border-borde bg-verde-50 px-6 py-14 text-center">
           <p className="text-tinta-suave">
@@ -114,6 +112,7 @@ export async function Bandeja({ sp }: { sp: Parametros }) {
           })}
         </ul>
       )}
+      </PestanasFiltros>
     </section>
   );
 }

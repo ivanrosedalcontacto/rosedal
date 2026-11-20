@@ -1,7 +1,5 @@
-import { sanearBusqueda } from "@/shared/lib/texto";
 import { ESTADOS_IDEA, TIPOS_IDEA } from "./esquemas";
 
-export { sanearBusqueda };
 
 /** Tipo de searchParams de Next, ya resuelto. */
 export type Parametros = Record<string, string | string[] | undefined>;
@@ -17,7 +15,6 @@ export type OrdenBandeja = (typeof ORDENES_BANDEJA)[number];
 export const TIEMPOS_FILTRO = ["15", "30", "60", "mas"] as const;
 
 export type FiltrosBandeja = {
-  q: string;
   tipo: string; // vacío = idea + idea_email
   estado: string; // vacío = sin archivar
   pilar: string;
@@ -45,7 +42,6 @@ export function leerFiltros(p: Parametros): FiltrosBandeja {
   const minutos = valor(p, "minutos");
   const orden = valor(p, "orden");
   return {
-    q: valor(p, "q"),
     tipo: incluido(TIPOS_IDEA, tipo) ? tipo : "",
     estado: incluido(ESTADOS_IDEA, estado) ? estado : "",
     pilar: valor(p, "pilar"),
@@ -57,8 +53,13 @@ export function leerFiltros(p: Parametros): FiltrosBandeja {
   };
 }
 
+/** Cuántos filtros hay aplicados (el orden no cuenta como filtro). */
+export function contarFiltros(f: FiltrosBandeja): number {
+  return [f.tipo, f.estado, f.pilar, f.oferta, f.lanzamiento, f.relevancia, f.minutos].filter(Boolean).length;
+}
+
 export function hayFiltrosActivos(f: FiltrosBandeja): boolean {
-  return Boolean(f.q || f.tipo || f.estado || f.pilar || f.oferta || f.lanzamiento || f.relevancia || f.minutos);
+  return Boolean(f.tipo || f.estado || f.pilar || f.oferta || f.lanzamiento || f.relevancia || f.minutos);
 }
 
 type ConPrioridad = {

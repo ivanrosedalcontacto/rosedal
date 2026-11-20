@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search } from "lucide-react";
 import { buscarGlobal, type ResultadoBusqueda } from "./acciones";
 
 type Accion = { titulo: string; detalle: string; href: string };
@@ -16,7 +15,7 @@ const ACCIONES: Accion[] = [
   { titulo: "Revisión semanal", detalle: "Revisar", href: "/revision" },
 ];
 
-/** Buscador global: Ctrl + K en ordenador y una lupa en móvil. */
+/** Buscador global: sin cuadro visible; se abre con Ctrl + K (⌘ + K en Mac). */
 export function BuscadorGlobal() {
   const router = useRouter();
   const [abierto, setAbierto] = useState(false);
@@ -61,17 +60,6 @@ export function BuscadorGlobal() {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setAbierto(true)}
-        className="flex min-h-11 items-center gap-2 rounded-full border border-borde px-3 text-sm text-tinta-suave"
-        aria-label="Buscar en la app"
-      >
-        <Search className="h-4 w-4" aria-hidden />
-        <span className="hidden md:inline">Buscar</span>
-        <kbd className="hidden rounded bg-fondo-suave px-1 text-[10px] md:inline">Ctrl K</kbd>
-      </button>
-
       {abierto && (
         <div className="fixed inset-0 z-50 flex items-start justify-center bg-tinta/30 p-4 pt-[10vh]">
           <div className="w-full max-w-xl overflow-hidden rounded-tarjeta border border-borde bg-fondo shadow-lg">
