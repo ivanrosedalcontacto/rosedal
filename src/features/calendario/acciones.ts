@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { Resultado } from "@/shared/components/mensaje-resultado";
 import { esFecha } from "@/shared/lib/fechas";
@@ -34,4 +35,23 @@ export async function moverPiezaAFecha(_p: Resultado, d: FormData): Promise<Resu
   revalidatePath("/hoy");
   revalidatePath("/biblioteca");
   return { error: null, ok: true };
+}
+
+/**
+ * Programar desde el calendario (día → pilar → pieza): solo piezas Editadas.
+ * `volver` es la vista del calendario de la que se vino; solo se aceptan rutas del calendario.
+ */
+export async function programarPieza(piezaId: string, fecha: string, volver: string): Promise<void> {
+  const pieza = uuid.safeParse(piezaId);
+  const destino = volver.startsWith("/calendario") && !volver.startsWith("//") ? volver : "/calendario";
+  if (!pieza.success || !esFecha(fecha)) redirect(destino);
+  const supabase = await crearClienteServidor();
+  const { data } = await supabase.from("piezas").select("estado,fecha_prevista").eq("id", pieza.data).maybeSingle();
+  if (data && data.estado === "editado") {
+    const { error } = await supabase.from("piezas").update({ fecha_prevista: fecha }).eq("id", pieza.data).is("publicado_snapshot", null);
+    if (!error) await anotarCambioDeFecha(supabase, pieza.data, data.fecha_prevista, fecha);
+  }
+  revalidatePath("/calendario");
+  revalidatePath("/hoy");
+  redirect(destino);
 }

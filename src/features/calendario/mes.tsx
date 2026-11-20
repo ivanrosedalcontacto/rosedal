@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { TONO_FASE, type BandaFase, type EntradaPieza, type HitoCalendario } from "./esquemas";
+import { TONO_FASE, type BandaFase, type EntradaPieza, type HitoCalendario, type PilarCalendario } from "./esquemas";
 import { TarjetaPieza } from "./tarjeta";
 
 type Props = {
@@ -9,6 +9,8 @@ type Props = {
   bandas: BandaFase[];
   senaladasPorDia: Map<string, { id: string; titulo: string }[]>;
   nombreLanzamiento: Map<string, string>;
+  pilares: Map<string, PilarCalendario>;
+  enlaceProgramar: (dia: string) => string;
   hoy: string;
   mes: string;
 };
@@ -16,7 +18,7 @@ type Props = {
 const DIAS_SEMANA = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
 
 /** Vista de mes: rejilla clásica; cada día muestra hasta tres piezas y el resto se abre. */
-export function Mes({ dias, piezasPorDia, hitosPorDia, bandas, senaladasPorDia, nombreLanzamiento, hoy, mes }: Props) {
+export function Mes({ dias, piezasPorDia, hitosPorDia, bandas, senaladasPorDia, nombreLanzamiento, pilares, enlaceProgramar, hoy, mes }: Props) {
   return (
     <div className="flex flex-col gap-2">
       <div className="grid grid-cols-7 gap-1 text-center text-xs text-tinta-suave">
@@ -62,6 +64,7 @@ export function Mes({ dias, piezasPorDia, hitosPorDia, bandas, senaladasPorDia, 
                   key={pieza.id}
                   pieza={pieza}
                   dias={dias}
+                  pilar={pieza.pilar_id ? pilares.get(pieza.pilar_id) : undefined}
                   lanzamiento={pieza.lanzamiento_id ? nombreLanzamiento.get(pieza.lanzamiento_id) : undefined}
                   compacta
                 />
@@ -69,6 +72,11 @@ export function Mes({ dias, piezasPorDia, hitosPorDia, bandas, senaladasPorDia, 
               {resto > 0 && (
                 <Link href={`/calendario?vista=semana&fecha=${dia}`} className="text-[11px] text-verde-700">
                   +{resto} más
+                </Link>
+              )}
+              {delMes && (
+                <Link href={enlaceProgramar(dia)} aria-label={`Programar el ${Number(dia.slice(8, 10))}`} className="mt-auto text-[11px] text-verde-700">
+                  + Programar
                 </Link>
               )}
             </div>

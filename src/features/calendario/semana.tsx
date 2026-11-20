@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { formatearFechaCorta } from "@/shared/lib/fechas";
-import { TONO_FASE, type BandaFase, type EntradaPieza, type HitoCalendario } from "./esquemas";
+import { TONO_FASE, type BandaFase, type EntradaPieza, type HitoCalendario, type PilarCalendario } from "./esquemas";
 import { TarjetaHito, TarjetaPieza } from "./tarjeta";
 
 type Props = {
@@ -10,11 +10,14 @@ type Props = {
   bandas: BandaFase[];
   senaladasPorDia: Map<string, { id: string; titulo: string }[]>;
   nombreLanzamiento: Map<string, string>;
+  pilares: Map<string, PilarCalendario>;
+  /** Enlace que abre «Programar» para ese día. */
+  enlaceProgramar: (dia: string) => string;
   hoy: string;
 };
 
 /** Vista de semana: siete columnas en ordenador y lista vertical en móvil. */
-export function Semana({ dias, piezasPorDia, hitosPorDia, bandas, senaladasPorDia, nombreLanzamiento, hoy }: Props) {
+export function Semana({ dias, piezasPorDia, hitosPorDia, bandas, senaladasPorDia, nombreLanzamiento, pilares, enlaceProgramar, hoy }: Props) {
   return (
     <div className="flex flex-col gap-4">
       {/* Banda de color con las fases del lanzamiento activo. */}
@@ -59,11 +62,12 @@ export function Semana({ dias, piezasPorDia, hitosPorDia, bandas, senaladasPorDi
                     key={pieza.id}
                     pieza={pieza}
                     dias={dias}
+                    pilar={pieza.pilar_id ? pilares.get(pieza.pilar_id) : undefined}
                     lanzamiento={pieza.lanzamiento_id ? nombreLanzamiento.get(pieza.lanzamiento_id) : undefined}
                   />
                 ))}
-                <Link href={`/piezas/nueva?fecha=${dia}`} className="text-sm text-verde-700">
-                  + Nueva pieza para este día
+                <Link href={enlaceProgramar(dia)} className="min-h-11 py-2 text-sm text-verde-700">
+                  + Programar este día
                 </Link>
               </div>
             </section>
@@ -94,11 +98,12 @@ export function Semana({ dias, piezasPorDia, hitosPorDia, bandas, senaladasPorDi
                   key={pieza.id}
                   pieza={pieza}
                   dias={dias}
+                  pilar={pieza.pilar_id ? pilares.get(pieza.pilar_id) : undefined}
                   lanzamiento={pieza.lanzamiento_id ? nombreLanzamiento.get(pieza.lanzamiento_id) : undefined}
                 />
               ))}
-              <Link href={`/piezas/nueva?fecha=${dia}`} className="mt-auto text-xs text-verde-700">
-                + Nueva pieza
+              <Link href={enlaceProgramar(dia)} className="mt-auto text-xs text-verde-700">
+                + Programar
               </Link>
             </section>
           );

@@ -202,6 +202,19 @@ e2e actualizadas (R1 sin buscador), `docs/01`, `02`, `03`, `06`, `continuar.md` 
 - **Fix**: lanzar la tanda en dos tramos de 4 (cada uno empieza por `00-ejemplo`), como pide `CLAUDE.md` para procesos largos.
 - **Aplicar en**: toda ejecución de e2e en esta máquina.
 
+### 2026-11-20: Parar el servidor de desarrollo no mata su proceso
+- **Error**: tras horas de pruebas el servidor iba lento; `TaskStop` cerró la terminal pero el proceso `node` siguió en el puerto 3000 y el nuevo arrancó en el 3001, así que las pruebas seguían contra el viejo.
+- **Fix**: comprobar con `netstat -ano | grep ":3000 .*LISTEN"` y cerrar ese PID con `taskkill /PID <pid> /F /T` antes de arrancar otro.
+- **Aplicar en**: cualquier reinicio del servidor de desarrollo en esta máquina.
+
+### 2026-11-20: Clics de e2e antes de la hidratación
+- **Error**: `00-ejemplo` pulsaba «Quitar ejemplo» antes de que React hidratara Ajustes; el clic no hacía nada y la prueba caducaba (no era la app).
+- **Fix**: `waitForLoadState("networkidle")` y reintento con `expect(...).toPass()` hasta ver el botón de confirmar.
+- **Aplicar en**: pruebas que pulsan botones con `onClick` nada más cargar la página.
+
+### 2026-11-20: Fase 5 hecha
+- Programar es `?programar=<día>&pilar=<id>` en la dirección (panel renderizado en el servidor, sin JavaScript propio). Solo piezas Editadas sin día. Prueba nueva: `e2e/r9-calendario-pilares.spec.ts`.
+
 ### 2026-11-20: Fases 3 y 4 hechas
 - Las pruebas que abrían piezas desde `/biblioteca` ahora usan `/biblioteca?vista=tablero` (la portada son carpetas de pilar). Prueba nueva: `e2e/r8-biblioteca-pilares.spec.ts`.
 

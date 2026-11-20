@@ -1,5 +1,3 @@
-import { CANALES_PIEZA, ESTADOS_PIEZA, FINALIDADES, FORMATOS_PIEZA } from "@/features/piezas/esquemas";
-
 /** Una pieza tal y como se ve en el calendario. */
 export type EntradaPieza = {
   id: string;
@@ -38,21 +36,8 @@ export type BandaFase = {
   lanzamiento_id: string;
 };
 
-export type FiltrosCalendario = {
-  canal: string;
-  formato: string;
-  pilar: string;
-  finalidad: string;
-  oferta: string;
-  lanzamiento: string;
-  estado: string;
-  q: string;
-};
-
-export const CANALES_FILTRO = CANALES_PIEZA;
-export const FORMATOS_FILTRO = FORMATOS_PIEZA;
-export const FINALIDADES_FILTRO = FINALIDADES;
-export const ESTADOS_FILTRO = ESTADOS_PIEZA;
+/** Pilar tal y como se pinta en el calendario: nombre y color (hex o variable CSS). */
+export type PilarCalendario = { id: string; nombre: string; color: string; archivado: boolean };
 
 /** Color de cada tipo de fase, para la banda sobre los días. */
 export const TONO_FASE: Record<string, string> = {

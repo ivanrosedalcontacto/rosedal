@@ -9,12 +9,18 @@ test("el ejemplo está cargado", async ({ page }) => {
   test.setTimeout(240_000);
   await entrar(page);
   await page.goto("/ajustes");
+  // Los botones son interactivos solo tras la hidratación: un clic antes no hace nada.
+  await page.waitForLoadState("networkidle");
   // Se parte siempre de un ejemplo limpio: las pruebas modifican sus datos (versiones de guion, orden de stories).
   // «Quitar ejemplo» solo borra lo marcado como ejemplo en la cuenta de pruebas.
   const quitar = page.getByRole("button", { name: "Quitar ejemplo" });
+  const confirmar = page.getByRole("button", { name: "Sí, quitar el ejemplo" });
   if ((await quitar.count()) > 0) {
-    await quitar.click();
-    await page.getByRole("button", { name: "Sí, quitar el ejemplo" }).click();
+    await expect(async () => {
+      if (await quitar.isVisible()) await quitar.click();
+      await expect(confirmar).toBeVisible({ timeout: 3_000 });
+    }).toPass({ timeout: 30_000 });
+    await confirmar.click();
   }
   const cargar = page.getByRole("button", { name: "Cargar ejemplo" });
   await cargar.click({ timeout: 120_000 });
