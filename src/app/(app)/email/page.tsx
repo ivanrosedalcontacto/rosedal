@@ -26,7 +26,7 @@ export default async function Email({ searchParams }: { searchParams: Promise<Pa
             key={v}
             href={`/email?vista=${v}`}
             aria-current={vista === v ? "page" : undefined}
-            className={`min-h-11 rounded-full px-4 py-2.5 text-sm ${vista === v ? "bg-verde-100 font-medium text-verde-700" : "border border-borde text-tinta"}`}
+            className={`min-h-11 rounded-full px-4 py-2.5 text-sm ${vista === v ? "bg-acento font-medium text-acento-texto" : "border border-borde text-tinta"}`}
           >
             {ETIQUETA_VISTA_EMAIL[v]}
           </Link>

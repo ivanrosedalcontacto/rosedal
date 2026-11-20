@@ -9,7 +9,7 @@ export function BalanceDelLanzamiento({ nombre, piezas }: { nombre: string; piez
     return (
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-semibold">Balance</h2>
-        <p className="rounded-tarjeta bg-verde-50 px-4 py-5 text-sm text-tinta-suave">
+        <p className="rounded-tarjeta bg-acento-suave px-4 py-5 text-sm text-tinta-suave">
           Todavía no hay métricas de solicitudes, reservas, compras o ingresos en este lanzamiento.
         </p>
       </section>

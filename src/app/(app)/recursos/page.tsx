@@ -35,7 +35,7 @@ export default async function Recursos({ searchParams }: { searchParams: Promise
             href={`/recursos?tipo=${t}`}
             aria-current={t === tipo ? "page" : undefined}
             className={`min-h-11 rounded-full px-4 py-2.5 text-sm ${
-              t === tipo ? "bg-verde-100 font-medium text-verde-700" : "border border-borde text-tinta"
+              t === tipo ? "bg-acento font-medium text-acento-texto" : "border border-borde text-tinta"
             }`}
           >
             {INFO_TIPO[t].plural}
@@ -44,7 +44,7 @@ export default async function Recursos({ searchParams }: { searchParams: Promise
       </nav>
 
       {lista.length === 0 ? (
-        <p className="rounded-tarjeta bg-verde-50 px-4 py-6 text-tinta-suave">
+        <p className="rounded-tarjeta bg-acento-suave px-4 py-6 text-tinta-suave">
           Aún no hay nada aquí. Añade tu primer {INFO_TIPO[tipo].singular} abajo.
         </p>
       ) : (

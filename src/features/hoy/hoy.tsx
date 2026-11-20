@@ -120,7 +120,7 @@ export async function Hoy() {
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-semibold">Hoy publico o envío</h2>
         {paraHoy.length === 0 && atrasadas.length === 0 ? (
-          <p className="rounded-tarjeta bg-verde-50 px-4 py-6 text-tinta-suave">Hoy no tienes nada previsto.</p>
+          <p className="rounded-tarjeta bg-acento-suave px-4 py-6 text-tinta-suave">Hoy no tienes nada previsto.</p>
         ) : (
           <ul className="flex flex-col gap-2">
             {paraHoy.map((pieza) => (
@@ -169,7 +169,7 @@ export async function Hoy() {
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-semibold">Tengo que preparar</h2>
         {preparar.length === 0 && paraRetomar.length === 0 ? (
-          <p className="rounded-tarjeta bg-verde-50 px-4 py-6 text-tinta-suave">No hay nada vencido en los próximos siete días.</p>
+          <p className="rounded-tarjeta bg-acento-suave px-4 py-6 text-tinta-suave">No hay nada vencido en los próximos siete días.</p>
         ) : (
           <ul className="flex flex-col gap-2">
             {preparar.map((pieza) => {
@@ -232,7 +232,7 @@ export async function Hoy() {
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-semibold">Próximo hito</h2>
         {!hito ? (
-          <p className="rounded-tarjeta bg-verde-50 px-4 py-6 text-tinta-suave">
+          <p className="rounded-tarjeta bg-acento-suave px-4 py-6 text-tinta-suave">
             No hay hitos a la vista. <Link href="/lanzamientos" className="text-verde-700">Mira tus lanzamientos</Link>.
           </p>
         ) : (

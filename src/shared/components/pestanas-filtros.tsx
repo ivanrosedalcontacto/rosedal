@@ -29,7 +29,7 @@ export function PestanasFiltros({ activos, total, limpiar, filtros, children }: 
       aria-selected={vista === clave}
       aria-controls={`${id}-panel-${clave}`}
       onClick={() => setVista(clave)}
-      className={`min-h-11 rounded-full px-4 py-2 text-sm ${vista === clave ? "bg-verde-100 font-medium text-verde-700" : "border border-borde text-tinta"}`}
+      className={`min-h-11 rounded-full px-4 py-2 text-sm ${vista === clave ? "bg-acento font-medium text-acento-texto" : "border border-borde text-tinta"}`}
     >
       {texto}
     </button>

@@ -19,7 +19,7 @@ export default async function Ofertas() {
       </div>
 
       {lista.length === 0 ? (
-        <p className="rounded-tarjeta bg-verde-50 px-4 py-6 text-tinta-suave">
+        <p className="rounded-tarjeta bg-acento-suave px-4 py-6 text-tinta-suave">
           Aún no has registrado ninguna oferta. Crea la primera abajo.
         </p>
       ) : (

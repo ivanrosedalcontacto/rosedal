@@ -92,7 +92,7 @@ function Historial({ usos }: { usos: FraseVista["usos"] }) {
 /** Sortea entre el resultado activo; no altera los filtros ni crea un uso. */
 export function ElegirFrase({ frases }: { frases: FraseVista[] }) {
   const [indice, setIndice] = useState(0);
-  if (frases.length === 0) return <p className="rounded-tarjeta bg-verde-50 p-4 text-sm text-tinta-suave">No hay frases que cumplan estos filtros para elegir hoy.</p>;
+  if (frases.length === 0) return <p className="rounded-tarjeta bg-acento-suave p-4 text-sm text-tinta-suave">No hay frases que cumplan estos filtros para elegir hoy.</p>;
   const frase = frases[indice % frases.length]!;
   return <section className="rounded-tarjeta bg-rosa-50 p-5"><h2 className="font-semibold">Una frase para hoy</h2><p className="mt-3 whitespace-pre-wrap text-lg leading-[1.6]">{frase.texto}</p><div className="mt-4 flex flex-wrap gap-2"><BotonCopiar texto={frase.texto} etiqueta="Copiar frase" /><button type="button" onClick={() => setIndice(Math.floor(Math.random() * frases.length))} className={botonDiscreto}>Otra</button></div></section>;
 }

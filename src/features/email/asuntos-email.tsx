@@ -16,7 +16,7 @@ export function AsuntosEmail({ piezaId, asuntos, bloqueado }: { piezaId: string;
         <h2 className="text-xl font-semibold">Asuntos</h2>
         <p className="text-sm text-tinta-suave">Prueba varias líneas y elige la que vas a enviar.</p>
       </div>
-      {asuntos.length === 0 && <p className="rounded-tarjeta bg-verde-50 p-4 text-sm text-tinta-suave">Todavía no hay asuntos. Añade el primero y quedará elegido.</p>}
+      {asuntos.length === 0 && <p className="rounded-tarjeta bg-acento-suave p-4 text-sm text-tinta-suave">Todavía no hay asuntos. Añade el primero y quedará elegido.</p>}
       <ul className="flex flex-col gap-3">
         {asuntos.map((asunto) => (
           <FilaAsunto key={asunto.id} piezaId={piezaId} asunto={asunto} bloqueado={bloqueado} />

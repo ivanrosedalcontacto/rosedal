@@ -57,7 +57,7 @@ export function Cronologia({
   asuntoPorPieza: Map<string, string>;
 }) {
   if (pasos.length === 0) {
-    return <p className="rounded-tarjeta bg-verde-50 p-5 text-tinta-suave">Todavía no hay pasos. Añade el primero debajo.</p>;
+    return <p className="rounded-tarjeta bg-acento-suave p-5 text-tinta-suave">Todavía no hay pasos. Añade el primero debajo.</p>;
   }
   return (
     <ol className="flex flex-col gap-0 border-l-2 border-borde pl-5">

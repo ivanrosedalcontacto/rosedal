@@ -148,7 +148,7 @@ export default async function FichaIdea({ params }: { params: Promise<{ id: stri
 
        <section className="flex flex-col gap-3">
          <h2 className="text-lg font-semibold">Piezas creadas a partir de esta idea</h2>
-         {piezas.length === 0 ? <p className="rounded-tarjeta bg-verde-50 px-4 py-6 text-tinta-suave">Aún no hay piezas a partir de esta idea. Crea la primera cuando quieras desarrollarla.</p> : <ul className="rounded-tarjeta border border-borde">{piezas.map((pieza) => <li key={pieza.id} className="border-b border-borde px-4 py-3 last:border-b-0"><Link href={`/piezas/${pieza.id}`} className="font-medium text-verde-700">{ETIQUETA_FORMATO[pieza.formato]} · {pieza.titulo}</Link><p className="mt-1 text-sm text-tinta-suave">{pieza.finalidad ?? "Sin finalidad"} · {ETIQUETA_ESTADO[pieza.estado]}{pieza.fecha_prevista ? ` · ${pieza.fecha_prevista}` : ""}</p></li>)}</ul>}
+         {piezas.length === 0 ? <p className="rounded-tarjeta bg-acento-suave px-4 py-6 text-tinta-suave">Aún no hay piezas a partir de esta idea. Crea la primera cuando quieras desarrollarla.</p> : <ul className="rounded-tarjeta border border-borde">{piezas.map((pieza) => <li key={pieza.id} className="border-b border-borde px-4 py-3 last:border-b-0"><Link href={`/piezas/${pieza.id}`} className="font-medium text-verde-700">{ETIQUETA_FORMATO[pieza.formato]} · {pieza.titulo}</Link><p className="mt-1 text-sm text-tinta-suave">{pieza.finalidad ?? "Sin finalidad"} · {ETIQUETA_ESTADO[pieza.estado]}{pieza.fecha_prevista ? ` · ${pieza.fecha_prevista}` : ""}</p></li>)}</ul>}
          <FormularioNuevaPieza ideaId={idea.id} titulo={primeraLinea(idea.texto)} />
        </section>
     </div>

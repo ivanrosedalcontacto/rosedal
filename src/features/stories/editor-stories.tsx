@@ -16,7 +16,7 @@ function textoSecuencia(tarjetas: StoryTarjeta[]) {
 
 export function EditorStories({ piezaId, tarjetas }: { piezaId: string; tarjetas: StoryTarjeta[] }) {
   return <section className="flex flex-col gap-4"><div className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="text-xl font-semibold">Secuencia de stories</h2><p className="text-sm text-tinta-suave">Sube o baja las tarjetas para cambiar el orden.</p></div><form action={crearTarjeta.bind(null, piezaId)}><button className={botonPrincipal}>+ Añadir tarjeta</button></form></div>
-    {tarjetas.length === 0 ? <p className="rounded-tarjeta bg-verde-50 p-4 text-tinta-suave">Añade la primera tarjeta para empezar la secuencia.</p> : <><div className="flex flex-col gap-3">{tarjetas.map((tarjeta, i) => <FormularioTarjeta key={tarjeta.id} piezaId={piezaId} tarjeta={tarjeta} numero={i + 1} primera={i === 0} ultima={i === tarjetas.length - 1} />)}</div><div className="flex flex-wrap items-center gap-3"><LecturaPantallaCompleta tarjetas={tarjetas} /></div><LecturaStories tarjetas={tarjetas} /></>}
+    {tarjetas.length === 0 ? <p className="rounded-tarjeta bg-acento-suave p-4 text-tinta-suave">Añade la primera tarjeta para empezar la secuencia.</p> : <><div className="flex flex-col gap-3">{tarjetas.map((tarjeta, i) => <FormularioTarjeta key={tarjeta.id} piezaId={piezaId} tarjeta={tarjeta} numero={i + 1} primera={i === 0} ultima={i === tarjetas.length - 1} />)}</div><div className="flex flex-wrap items-center gap-3"><LecturaPantallaCompleta tarjetas={tarjetas} /></div><LecturaStories tarjetas={tarjetas} /></>}
     <FormularioPlantillaStories piezaId={piezaId} />
   </section>;
 }

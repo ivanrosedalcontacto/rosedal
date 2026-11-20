@@ -99,7 +99,7 @@ export function BarraFiltros({ actual, pilares, ofertas, lanzamientos }: { actua
               key={clave}
               type="button"
               onClick={() => navegar({ [clave]: "" } as Partial<FiltrosBandeja>)}
-              className="inline-flex min-h-9 items-center gap-1 rounded-full bg-verde-100 px-3 py-1 text-xs font-medium text-verde-700"
+              className="inline-flex min-h-9 items-center gap-1 rounded-full bg-acento px-3 py-1 text-xs font-medium text-acento-texto"
             >
               {texto}
               <X className="h-3 w-3" aria-hidden />

@@ -41,7 +41,7 @@ export function EditorEmail({
       />
 
       {bloqueado && (
-        <p className="rounded-tarjeta bg-verde-50 px-4 py-3 text-sm text-verde-700">
+        <p className="rounded-tarjeta bg-acento-suave px-4 py-3 text-sm text-verde-700">
           {enMarcha
             ? "Este paso está en marcha en tu plataforma externa. Su contenido queda conservado y no se edita."
             : `Enviado el ${pieza.fecha_real ?? "sin fecha"} · el asunto, la vista previa y el cuerpo quedan conservados. Usa «Reutilizar» para partir de él.`}

@@ -71,7 +71,7 @@ export async function Brainstorming({ sp }: { sp: Parametros }) {
               href={`/ideas?vista=brainstorming&por=${d}`}
               aria-current={d === por ? "page" : undefined}
               className={`min-h-11 rounded-full px-4 py-2.5 text-sm ${
-                d === por ? "bg-verde-100 font-medium text-verde-700" : "border border-borde text-tinta"
+                d === por ? "bg-acento font-medium text-acento-texto" : "border border-borde text-tinta"
               }`}
             >
               {ETIQUETA_DIMENSION[d]}
@@ -84,7 +84,7 @@ export async function Brainstorming({ sp }: { sp: Parametros }) {
       <p className="text-sm text-tinta-suave">Agrupadas por {ETIQUETA_DIMENSION[por].toLowerCase()}.</p>
 
       {ideas.length === 0 && (
-        <p className="rounded-tarjeta bg-verde-50 px-4 py-6 text-tinta-suave">
+        <p className="rounded-tarjeta bg-acento-suave px-4 py-6 text-tinta-suave">
           Todavía no tienes ideas para agrupar. Captura una desde Hoy con «+ Idea».
         </p>
       )}

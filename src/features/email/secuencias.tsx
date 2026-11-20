@@ -46,7 +46,7 @@ export async function Secuencias() {
       </div>
 
       {datos.length === 0 ? (
-        <p className="rounded-tarjeta bg-verde-50 p-6 text-center text-tinta-suave">Todavía no hay secuencias. Crea la primera o parte de una plantilla.</p>
+        <p className="rounded-tarjeta bg-acento-suave p-6 text-center text-tinta-suave">Todavía no hay secuencias. Crea la primera o parte de una plantilla.</p>
       ) : (
         <ul className="grid gap-3 md:grid-cols-2">
           {datos.map(({ secuencia, total, porEscribir }) => {

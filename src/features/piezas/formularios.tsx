@@ -90,7 +90,7 @@ export function FormularioPieza({ pieza, pilares, ofertas }: { pieza: Pieza; pil
           </>
         )}
       </fieldset>
-      {bloqueada ? <p className="rounded-tarjeta bg-verde-50 px-4 py-3 text-sm text-verde-700">El contenido publicado queda congelado. Crea una adaptación o reutilízalo para cambiarlo.</p> : <><MensajeResultado r={r} /><button type="submit" disabled={pendiente} className={botonPrincipal}>{pendiente ? "Guardando…" : "Guardar cambios"}</button></>}
+      {bloqueada ? <p className="rounded-tarjeta bg-acento-suave px-4 py-3 text-sm text-verde-700">El contenido publicado queda congelado. Crea una adaptación o reutilízalo para cambiarlo.</p> : <><MensajeResultado r={r} /><button type="submit" disabled={pendiente} className={botonPrincipal}>{pendiente ? "Guardando…" : "Guardar cambios"}</button></>}
     </form>
   );
 }
@@ -135,7 +135,7 @@ export function FormularioPlanificar({ piezaId, fecha }: { piezaId: string; fech
 export function FormularioPublicar({ piezaId, fecha, tipo = "pieza" }: { piezaId: string; fecha: string | null; tipo?: "pieza" | "email" }) {
   const [r, accion, pendiente] = useActionState(publicarPieza.bind(null, piezaId), inicial);
   const esEmail = tipo === "email";
-  return <form action={accion} className="flex flex-col gap-2 rounded-tarjeta bg-verde-50 p-3">
+  return <form action={accion} className="flex flex-col gap-2 rounded-tarjeta bg-acento-suave p-3">
     <p className="text-sm font-medium">{esEmail ? "Marcar como enviado y conservar la copia" : "Publicar y congelar contenido"}</p>
     <label className="text-sm">{esEmail ? "Fecha real de envío" : "Fecha real"}<input name="fecha_real" type="date" defaultValue={fecha ?? new Date().toISOString().slice(0, 10)} className={campo} /></label>
     <label className="text-sm">{esEmail ? "Enlace a la versión web (opcional)" : "Enlace publicado (opcional)"}<input name="url_publicada" inputMode="url" className={campo} /></label>

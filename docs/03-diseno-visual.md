@@ -15,7 +15,7 @@ Define estos colores como variables de tema, una sola vez. Los componentes usan 
 | Variable | Valor | Uso |
 |---|---|---|
 | `fondo` | `#FFFFFF` | Fondo de la app y de las tarjetas |
-| `fondo-suave` | `#FAFBF9` | Barra lateral, zonas secundarias |
+| `fondo-suave` | `#FDF5F6` | Rosa muy claro: barra lateral, paneles, bloques suaves (antes `#FAFBF9`) |
 | `borde` | `#ECEFEC` | Líneas y bordes de tarjeta |
 | `tinta` | `#2B312D` | Texto principal |
 | `tinta-suave` | `#6B736E` | Texto secundario, ayudas |
@@ -25,11 +25,11 @@ Define estos colores como variables de tema, una sola vez. Los componentes usan 
 
 | Variable | Valor | Uso |
 |---|---|---|
-| `verde-50` | `#F4F8F4` | Fondo de bloques destacados, elemento activo del menú |
+| `verde-50` | `#F4F8F4` | Botones de captura de Hoy, hover de tarjetas |
 | `verde-100` | `#E6F0E7` | Fondo de etiquetas |
 | `verde-200` | `#CFE2D2` | Bordes con color, celdas del mapa |
 | `verde-300` | `#A9CBB0` | Decoración, foco |
-| `verde-700` | `#3D6B52` | Botón principal, enlaces, texto de acento |
+| `verde-700` | `#3D6B52` | Botón principal, enlaces, «publicado» |
 
 ### Rosas
 
@@ -41,6 +41,16 @@ Define estos colores como variables de tema, una sola vez. Los componentes usan 
 | `rosa-300` | `#EDB1BF` | Decoración |
 | `rosa-800` | `#8F3F58` | Texto sobre rosa claro |
 | `frambuesa` | `#B5506F` | Finalidad Convert, acento fuerte |
+
+### Acento rosa (2026-11-20, a petición de la usuaria)
+
+El rosa claro acompaña al verde: el verde se queda en las acciones (botones, enlaces, captura) y en «publicado»; el rosa marca dónde estás y lo seleccionado.
+
+| Variable | Valor | Uso |
+|---|---|---|
+| `acento-suave` | `#FDF5F6` | Bloques destacados y avisos vacíos |
+| `acento` | `#FBE8EC` | Fondo del menú activo, pestañas y chips de filtro elegidos |
+| `acento-texto` | `#8F3F58` | Texto sobre `acento`; icono activo de la barra móvil |
 
 ### Estados del sistema
 
@@ -62,12 +72,17 @@ Todos superan el 4,5:1 exigido para texto normal. Si cambias un valor, vuelve a 
 | `verde-700` | `verde-100` | 5,25 |
 | `verde-700` | `verde-50` | 5,72 |
 | `rosa-800` | `rosa-100` | 5,91 |
+| `rosa-800` (`acento-texto`) | `rosa-50` | 6,48 |
+| `tinta` | `rosa-50` (`fondo-suave`) | 12,39 |
+| `tinta-suave` | `rosa-50` (`fondo-suave`) | 4,55 |
+| `verde-700` | `rosa-50` | 5,72 |
+| `verde-700` | `rosa-100` | 5,22 |
 | blanco | `frambuesa` | 4,84 |
 | `#2F6B5E` | `#E0F2EC` | 5,34 |
 | Aviso | su fondo | 4,99 |
 | Error | su fondo | 5,38 |
 
-Dos combinaciones que parecen naturales y **no** llegan: blanco sobre un verde medio (`#4F8767`, 4,21) y `tinta-tenue` sobre blanco (3,23). Por eso el botón principal usa `verde-700` y el texto secundario usa `tinta-suave`.
+Dos combinaciones que parecen naturales y **no** llegan: blanco sobre un verde medio (`#4F8767`, 4,21) y `tinta-tenue` sobre blanco (3,23). Sobre rosa: `tinta-suave` en `rosa-100` (4,15) no llega; en `acento` el texto va en `acento-texto` o `tinta`. Por eso el botón principal usa `verde-700` y el texto secundario usa `tinta-suave`.
 
 ## Finalidades
 

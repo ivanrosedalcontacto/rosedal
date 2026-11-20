@@ -32,7 +32,7 @@ export function NavLateral() {
                       href={href}
                       aria-current={activa ? "page" : undefined}
                       className={`flex items-center gap-3 rounded-boton px-2 py-2 transition-colors ${
-                        activa ? "bg-verde-100 font-medium text-verde-700" : "text-tinta hover:bg-verde-50"
+                        activa ? "bg-acento font-medium text-acento-texto" : "text-tinta hover:bg-acento"
                       }`}
                     >
                       <Icono className="h-[18px] w-[18px]" strokeWidth={1.5} aria-hidden />
@@ -48,7 +48,7 @@ export function NavLateral() {
       <form action={cerrarSesion}>
         <button
           type="submit"
-          className="min-h-11 w-full rounded-boton px-2 py-2 text-left text-sm text-tinta-suave hover:bg-verde-50"
+          className="min-h-11 w-full rounded-boton px-2 py-2 text-left text-sm text-tinta-suave hover:bg-acento"
         >
           Cerrar sesión
         </button>

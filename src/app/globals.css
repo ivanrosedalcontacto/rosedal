@@ -3,7 +3,7 @@
 /* Paleta de Rosedal. Valores y contrastes: docs/03-diseno-visual.md */
 @theme {
   --color-fondo: #ffffff;
-  --color-fondo-suave: #fafbf9;
+  --color-fondo-suave: #fdf5f6; /* rosa muy claro: paneles, barra lateral, tarjetas suaves */
   --color-borde: #ecefec;
   --color-tinta: #2b312d;
   --color-tinta-suave: #6b736e;
@@ -21,6 +21,11 @@
   --color-rosa-300: #edb1bf;
   --color-rosa-800: #8f3f58;
   --color-frambuesa: #b5506f;
+
+  /* Acento rosa (selección y navegación). El verde se queda en acciones y en «publicado». */
+  --color-acento-suave: #fdf5f6;
+  --color-acento: #fbe8ec;
+  --color-acento-texto: #8f3f58;
 
   --color-menta-100: #e0f2ec;
   --color-menta-700: #2f6b5e;

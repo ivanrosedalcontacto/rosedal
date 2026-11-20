@@ -98,7 +98,7 @@ export function LecturaPantallaCompleta({ tarjetas }: { tarjetas: StoryTarjeta[]
             <h2 className="font-serif text-3xl text-verde-700 sm:text-4xl">{tarjeta.titulo || "Sin título"}</h2>
             {tarjeta.que_digo && <p className="whitespace-pre-wrap text-2xl leading-relaxed sm:text-3xl">{tarjeta.que_digo}</p>}
             {tarjeta.texto_pantalla && (
-              <section className="rounded-tarjeta bg-verde-50 p-5">
+              <section className="rounded-tarjeta bg-acento-suave p-5">
                 <h3 className="text-sm font-medium text-tinta-suave">Texto en pantalla</h3>
                 <p className="mt-1 whitespace-pre-wrap text-xl sm:text-2xl">{tarjeta.texto_pantalla}</p>
               </section>

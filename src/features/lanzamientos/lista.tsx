@@ -54,7 +54,7 @@ export async function ListaLanzamientos() {
       </div>
 
       {datos.length === 0 ? (
-        <p className="rounded-tarjeta bg-verde-50 p-6 text-center text-tinta-suave">
+        <p className="rounded-tarjeta bg-acento-suave p-6 text-center text-tinta-suave">
           Todavía no hay lanzamientos. Crea el primero desde cero o parte de una plantilla.
         </p>
       ) : (

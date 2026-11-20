@@ -72,7 +72,7 @@ function ContenidoDeOferta({
       </div>
 
       {piezas.length === 0 ? (
-        <p className="rounded-tarjeta bg-verde-50 px-4 py-5 text-sm text-tinta-suave">
+        <p className="rounded-tarjeta bg-acento-suave px-4 py-5 text-sm text-tinta-suave">
           Todavía no hay piezas que promocionen esta oferta.
         </p>
       ) : (
@@ -211,7 +211,7 @@ export default async function FichaOferta({ params }: { params: Promise<{ id: st
       <section className="flex flex-col gap-4">
         <h2 className="text-lg font-semibold">Objeciones frecuentes</h2>
         {lista.length === 0 ? (
-          <p className="rounded-tarjeta bg-verde-50 px-4 py-6 text-tinta-suave">
+          <p className="rounded-tarjeta bg-acento-suave px-4 py-6 text-tinta-suave">
             Apunta aquí lo que te dicen antes de comprar y cómo lo respondes.
           </p>
         ) : (

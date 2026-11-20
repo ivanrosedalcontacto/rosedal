@@ -32,7 +32,7 @@ export function NavMovil() {
                 href={e.href}
                 aria-current={ruta === e.href ? "page" : undefined}
                 className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs ${
-                  ruta === e.href ? "font-medium text-verde-700" : "text-tinta-suave"
+                  ruta === e.href ? "font-medium text-acento-texto" : "text-tinta-suave"
                 }`}
               >
                 <e.icono className="h-5 w-5" strokeWidth={1.5} aria-hidden />

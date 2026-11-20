@@ -37,7 +37,7 @@ export async function IdeasEmail() {
     <section className="flex flex-col gap-4">
       <p className="text-sm text-tinta-suave">Asuntos, anécdotas, preguntas o argumentos que quieres convertir en correo.</p>
       {ideas.length === 0 ? (
-        <p className="rounded-tarjeta bg-verde-50 p-6 text-center text-tinta-suave">
+        <p className="rounded-tarjeta bg-acento-suave p-6 text-center text-tinta-suave">
           Todavía no tienes ideas de email. Añádelas desde <Link href="/ideas" className="text-verde-700">Ideas</Link> eligiendo el tipo «Idea de email».
         </p>
       ) : (

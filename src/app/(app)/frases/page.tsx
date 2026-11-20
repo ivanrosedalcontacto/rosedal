@@ -44,7 +44,7 @@ export default async function Frases({ searchParams }: { searchParams: Promise<P
     </form>}>
       <div className="flex flex-col gap-6">
         <ElegirFrase frases={vistas} />
-        {vistas.length === 0 ? <p className="rounded-tarjeta bg-verde-50 p-6 text-center text-tinta-suave">{filtro === "todas" ? "No hay frases aquí todavía. Guarda la primera desde «+ Frase»." : "Ninguna frase cumple este filtro."}</p> : <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{vistas.map((frase) => <TarjetaFrase key={frase.id} frase={frase} />)}</section>}
+        {vistas.length === 0 ? <p className="rounded-tarjeta bg-acento-suave p-6 text-center text-tinta-suave">{filtro === "todas" ? "No hay frases aquí todavía. Guarda la primera desde «+ Frase»." : "Ninguna frase cumple este filtro."}</p> : <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{vistas.map((frase) => <TarjetaFrase key={frase.id} frase={frase} />)}</section>}
       </div>
     </PestanasFiltros>
   </div>;

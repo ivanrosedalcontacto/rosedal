@@ -79,7 +79,7 @@ export async function Broadcasts({ sp }: { sp: Parametros }) {
             key={p}
             href={`/email?vista=broadcasts&pestana=${p}`}
             aria-current={pestana === p ? "page" : undefined}
-            className={`min-h-11 rounded-full px-4 py-2.5 text-sm ${pestana === p ? "bg-verde-100 font-medium text-verde-700" : "border border-borde text-tinta"}`}
+            className={`min-h-11 rounded-full px-4 py-2.5 text-sm ${pestana === p ? "bg-acento font-medium text-acento-texto" : "border border-borde text-tinta"}`}
           >
             {ETIQUETA_PESTANA[p]}
           </Link>
@@ -115,7 +115,7 @@ export async function Broadcasts({ sp }: { sp: Parametros }) {
       >
 
       {correos.length === 0 ? (
-        <p className="rounded-tarjeta bg-verde-50 p-6 text-center text-tinta-suave">
+        <p className="rounded-tarjeta bg-acento-suave p-6 text-center text-tinta-suave">
           {pestana === "enviados" ? "Todavía no has marcado ningún correo como enviado." : "No hay correos que cumplan estos filtros."}
         </p>
       ) : pestana === "semana" ? (

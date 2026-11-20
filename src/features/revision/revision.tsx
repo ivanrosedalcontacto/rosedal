@@ -106,7 +106,7 @@ export async function Revision({ sp }: { sp: Parametros }) {
           <BotonCopiar texto={resumenCopiable(salidas.map((p) => ({ titulo: p.titulo, formato: p.formato, fecha_real: p.fecha_real, metricas: metricasPorPieza.get(p.id) ?? [] })))} etiqueta="Copiar resumen" />
         </div>
         {salidas.length === 0 ? (
-          <p className="rounded-tarjeta bg-verde-50 px-4 py-6 text-tinta-suave">Esta semana no salió ninguna pieza.</p>
+          <p className="rounded-tarjeta bg-acento-suave px-4 py-6 text-tinta-suave">Esta semana no salió ninguna pieza.</p>
         ) : (
           <ul className="flex flex-col gap-4">
             {salidas.map((pieza) => {
@@ -181,7 +181,7 @@ export async function Revision({ sp }: { sp: Parametros }) {
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-semibold">Lo que no salió</h2>
         {noSalidas.length === 0 ? (
-          <p className="rounded-tarjeta bg-verde-50 px-4 py-6 text-tinta-suave">Todo lo previsto para esta semana salió.</p>
+          <p className="rounded-tarjeta bg-acento-suave px-4 py-6 text-tinta-suave">Todo lo previsto para esta semana salió.</p>
         ) : (
           <ul className="flex flex-col gap-2">
             {noSalidas.map((pieza) => (
@@ -209,7 +209,7 @@ export async function Revision({ sp }: { sp: Parametros }) {
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-semibold">Datos que arrastro</h2>
         {arrastre.length === 0 ? (
-          <p className="rounded-tarjeta bg-verde-50 px-4 py-6 text-tinta-suave">No queda ninguna métrica sin registrar.</p>
+          <p className="rounded-tarjeta bg-acento-suave px-4 py-6 text-tinta-suave">No queda ninguna métrica sin registrar.</p>
         ) : (
           <ul className="flex flex-col gap-2">
             {arrastre.map((pieza) => (

@@ -130,10 +130,10 @@ export async function Calendario({ sp }: { sp: Parametros }) {
   return (
     <div className="flex flex-col gap-5">
       <nav aria-label="Vistas del calendario" className="flex flex-wrap gap-2">
-        <Link href={enlazar("semana", inicio)} className={`min-h-11 rounded-full px-4 py-2 text-sm ${vista === "semana" ? "bg-verde-100 font-medium text-verde-700" : "border border-borde"}`}>
+        <Link href={enlazar("semana", inicio)} className={`min-h-11 rounded-full px-4 py-2 text-sm ${vista === "semana" ? "bg-acento font-medium text-acento-texto" : "border border-borde"}`}>
           Semana
         </Link>
-        <Link href={enlazar("mes", ancla)} className={`min-h-11 rounded-full px-4 py-2 text-sm ${vista === "mes" ? "bg-verde-100 font-medium text-verde-700" : "border border-borde"}`}>
+        <Link href={enlazar("mes", ancla)} className={`min-h-11 rounded-full px-4 py-2 text-sm ${vista === "mes" ? "bg-acento font-medium text-acento-texto" : "border border-borde"}`}>
           Mes
         </Link>
       </nav>
